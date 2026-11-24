@@ -1,0 +1,176 @@
+/* CSS khusus TabSatuSehatRL51.js — dipisah dari RL51View.module.css, hanya kelas yang dipakai file ini */
+/* Tampilan tabel halaman RL 5.1 (tab SIRS & SATUSEHAT) - mengikuti gaya RL 3.2 */
+.table-container {
+    max-height: 500px;
+    overflow: auto;
+}
+
+.table {
+    /* lebar total diatur inline sesuai jumlah kolom */
+    min-width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    table-layout: fixed;
+    font-size: 15px;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.table th,
+.table td {
+    padding: 8px;
+    border-right: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    background-color: #ffffff;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.table tbody tr > td:first-child,
+.table thead tr:first-child > th:first-child {
+    border-left: 1px solid #ddd;
+}
+
+/* Header 3 tingkat, tinggi tiap baris dikunci 40px agar posisi sticky pas */
+.table thead th {
+    background-color: #fbfefe;
+    color: #59636e;
+    position: -webkit-sticky;
+    position: sticky;
+    z-index: 2;
+    height: 40px;
+    white-space: nowrap;
+}
+
+.table thead tr:first-child th {
+    top: 0;
+    border-top: 1px solid #ddd;
+}
+
+.table thead tr.subheader-row th {
+    top: 40px;
+}
+
+.table thead tr.subsubheader-row th {
+    top: 80px;
+}
+
+.table thead th.wrap {
+    white-space: normal;
+}
+
+/* Lebar kolom ditetapkan lewat <colgroup> di RL41.js */
+.w-no { width: 50px; }
+.w-kode { width: 90px; }
+.w-diag { width: 260px; }
+.w-angka { width: 95px; }
+
+/* Kolom tetap di kiri: posisi left = jumlah lebar kolom sebelumnya */
+.col-no {
+    left: 0;
+}
+
+.table thead th.col-no {
+    top: 0;
+    z-index: 4;
+    white-space: normal;
+}
+
+.table tbody td.col-no {
+    position: -webkit-sticky;
+    position: sticky;
+    z-index: 1;
+}
+
+.table tbody tr:hover td {
+    background-color: #f2f2f2;
+}
+
+/* Tab SATUSEHAT: 3 kolom tetap (No, ICD 10, Diagnosis) */
+.col-icd {
+    left: 50px;
+}
+
+.col-diagnosis {
+    left: 140px;
+    text-align: left !important;
+}
+
+.table thead th.col-icd,
+.table thead th.col-diagnosis {
+    top: 0;
+    z-index: 4;
+    white-space: normal;
+}
+
+.table thead th.col-diagnosis {
+    text-align: center !important;
+}
+
+.table tbody td.col-icd,
+.table tbody td.col-diagnosis {
+    position: -webkit-sticky;
+    position: sticky;
+    z-index: 1;
+}
+
+.table tbody td.col-diagnosis {
+    box-shadow: inset -1px 0 0 #ddd;
+}
+
+.pagination {
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+/* ===== Judul kolom freeze pekat =====
+   Tanpa ini judul kolom yang tergeser (mis. "1 - 23 Jam") tampak samar
+   di belakang judul No./Aksi/Kode/Diagnosis karena latar judul di
+   GlassTheme.css sedikit transparan (0.94). */
+:global(body.glass-theme #root) table.table thead th.col-no,
+:global(body.glass-theme #root) table.table thead th.col-icd,
+:global(body.glass-theme #root) table.table thead th.col-diagnosis {
+    background: #e1ebf7 !important;
+}
+
+/* ===== Judul kelompok yang sangat lebar (colSpan puluhan kolom) =====
+   Bila di-center biasa, teks berada di tengah kolom selebar ~4.750px (jauh
+   di luar layar). Teks dibuat sticky di tengah area data yang TERLIHAT:
+   left = 50% lebar wadah + setengah lebar kolom freeze, lalu digeser
+   -50% lebar teks. Tab RL 5.1: freeze 560px; tab SATUSEHAT: freeze 400px. */
+.table thead th.group-head {
+    text-align: left !important;
+}
+
+.group-label {
+    position: -webkit-sticky;
+    position: sticky;
+    left: calc(50% + 280px);
+    display: inline-block;
+    transform: translateX(-50%);
+    white-space: nowrap;
+}
+
+.group-label-ss {
+    left: calc(50% + 200px);
+}
+
+/* ===== Garis pemisah kolom freeze pekat =====
+   Garis bawaan tema (cokelat transparan) di atas sel krem tampak seperti
+   celah terang antar kolom 1-2, 2-3, 3-4. Dibuat pekat agar terbaca sebagai
+   garis tabel biasa. */
+:global(body.glass-theme #root > .container) .table tbody td.col-no,
+:global(body.glass-theme #root > .container) .table tbody td.col-icd,
+:global(body.glass-theme #root > .container) .table tbody td.col-diagnosis {
+    border-right: 1px solid #d9cbb8 !important;
+    border-bottom: 1px solid #d9cbb8 !important;
+}
+
+:global(body.glass-theme #root > .container) .table thead th.col-no,
+:global(body.glass-theme #root > .container) .table thead th.col-icd,
+:global(body.glass-theme #root > .container) .table thead th.col-diagnosis {
+    border-right: 1px solid #c5d3e5 !important;
+    border-bottom: 1px solid #c5d3e5 !important;
+}

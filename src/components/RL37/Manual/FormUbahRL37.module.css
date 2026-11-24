@@ -1,0 +1,29 @@
+/* CSS khusus FormUbahRL37.js — dipisah dari RL37/FormTambahRL37.module.css; hanya kelas yang dipakai file ini */
+.table {
+    width: 200%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    font-size: 15px;
+    font-family: 'Times New Roman', Times, serif; /* Set font family */
+    /* Ensures column widths are consistent */
+}
+
+.table th,
+.table td {
+    padding: 8px;
+    border: 1px solid #ddd;
+}
+
+.table thead th {
+    background-color: #779D9E;
+    color: white;
+    position: -webkit-sticky;
+    /* For Safari */
+    position: sticky;
+    top: 0;
+    /* Keeps the main header at the top */
+    z-index: 2;
+    /* Ensures the main header is above other content */
+    text-align: center;
+    vertical-align: middle;
+}

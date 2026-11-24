@@ -1,0 +1,127 @@
+/* ===== Tema toast (react-toastify) — kaca terang, aksen biru-cokelat =====
+   Kelas warna (gl-toast-ok / -err / -warn / -info) dipasang otomatis oleh
+   ToastTheme.js berdasarkan jenis/isi pesan. Selektor diawali .Toastify
+   agar mengalahkan ReactToastify.css yang dimuat oleh banyak komponen. */
+
+.Toastify .Toastify__toast-container {
+  width: 380px;
+}
+
+.Toastify .Toastify__toast {
+  --gl-toast-accent: linear-gradient(135deg, #1f5fa8, #0d2c54 55%, #8b5a2b);
+  --gl-toast-icon: "i";
+  position: relative;
+  min-height: 64px;
+  margin-bottom: 12px;
+  padding: 12px 12px 12px 60px;
+  border-radius: 16px;
+  overflow: hidden;
+  color: #0d2c54;
+  font-family: inherit;
+  /* cukup pekat agar tulisan di belakang toast tidak ikut terbaca */
+  background: rgba(255, 255, 255, 0.97);
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  box-shadow:
+    inset 0 1px 0 #fff,
+    0 14px 34px rgba(13, 30, 55, 0.22);
+}
+
+/* Garis aksen di kiri */
+.Toastify .Toastify__toast::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 5px;
+  background: var(--gl-toast-accent);
+}
+
+/* Ikon bulat */
+.Toastify .Toastify__toast::before {
+  content: var(--gl-toast-icon);
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 17px;
+  font-weight: 800;
+  line-height: 1;
+  color: #fff;
+  background: var(--gl-toast-accent);
+  box-shadow: 0 4px 12px rgba(13, 44, 84, 0.3);
+}
+
+/* Ikon bawaan react-toastify disembunyikan agar seragam */
+.Toastify .Toastify__toast-icon {
+  display: none;
+}
+
+.Toastify .Toastify__toast-body {
+  padding: 0;
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: #0d2c54;
+}
+
+.Toastify .Toastify__close-button {
+  align-self: flex-start;
+  color: #0d2c54;
+  opacity: 0.45;
+}
+
+.Toastify .Toastify__close-button:hover {
+  opacity: 0.8;
+}
+
+.Toastify .Toastify__progress-bar {
+  height: 3px;
+  background: var(--gl-toast-accent);
+}
+
+/* ---------- Warna per jenis ---------- */
+.Toastify .Toastify__toast.gl-toast-ok {
+  --gl-toast-accent: linear-gradient(135deg, #2a74c4, #0d2c54);
+  --gl-toast-icon: "✓";
+}
+
+.Toastify .Toastify__toast.gl-toast-err {
+  --gl-toast-accent: linear-gradient(135deg, #e56a6a, #b03030);
+  --gl-toast-icon: "!";
+}
+
+.Toastify .Toastify__toast.gl-toast-warn {
+  --gl-toast-accent: linear-gradient(135deg, #f0c27a, #8b5a2b);
+  --gl-toast-icon: "!";
+}
+
+.Toastify .Toastify__toast.gl-toast-info {
+  --gl-toast-accent: linear-gradient(135deg, #1f5fa8, #0d2c54 55%, #8b5a2b);
+  --gl-toast-icon: "i";
+}
+
+/* HP/tablet: toast di bawah topbar (tinggi 56px) agar tidak tertutup */
+@media (max-width: 991.98px) {
+  .Toastify .Toastify__toast-container--top-right,
+  .Toastify .Toastify__toast-container--top-center,
+  .Toastify .Toastify__toast-container--top-left {
+    top: 64px;
+  }
+}
+
+@media (max-width: 480px) {
+  .Toastify .Toastify__toast-container {
+    width: 100vw;
+    padding: 0 10px;
+  }
+}

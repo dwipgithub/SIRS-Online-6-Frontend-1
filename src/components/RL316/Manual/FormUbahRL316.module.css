@@ -1,0 +1,106 @@
+/* CSS khusus FormUbahRL316.js — dipisah dari RL316/FormTambahRL316.module.css; hanya kelas yang dipakai file ini */
+.table-container {
+  /* max-height (standar RL 3.2): tinggi mengikuti isi, maksimal 500px lalu
+     scroll. Sebelumnya min-height sehingga tabel 1 baris di halaman ubah
+     tetap setinggi 500px dengan ruang kosong di bawahnya. */
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.table {
+  width: 200%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  font-size: 15px;
+  font-family: "Times New Roman", Times, serif; /* Set font family */
+  /* Ensures column widths are consistent */
+}
+
+.table th,
+.table td {
+  padding: 8px;
+  border: 2px solid #ddd;
+}
+
+.table thead th {
+  background-color: #779d9e;
+  color: white;
+  position: -webkit-sticky;
+  /* For Safari */
+  position: sticky;
+  top: 0;
+  /* Keeps the main header at the top */
+  z-index: 2;
+  /* Ensures the main header is above other content */
+  text-align: center;
+  vertical-align: middle;
+}
+
+/* Ubah */
+.table thead th.sticky-header-ubah:nth-child(1) {
+  position: -webkit-sticky; /* For Safari */
+  position: sticky;
+  left: 0;
+  z-index: 4; /* Above both header and body content */
+}
+.table thead th.sticky-header-ubah:nth-child(2) {
+  position: -webkit-sticky; /* For Safari */
+  position: sticky;
+  left: 60px; /* = lebar kolom No. (colgroup di FormUbahRL316.js) */
+  z-index: 4; /* Above both header and body content */
+}
+.table thead th.sticky-header-ubah:nth-child(3) {
+  position: -webkit-sticky; /* For Safari */
+  position: sticky;
+  left: 237px;
+  z-index: 4; /* Above both header and body content */
+}
+
+.table thead th.sticky-header-ubah:nth-child(4) {
+  position: -webkit-sticky; /* For Safari */
+  position: sticky;
+  left: 363px;
+  z-index: 4; /* Above both header and body content */
+}
+
+.table tbody tr td.sticky-column-ubah:nth-child(1) {
+  position: -webkit-sticky; /* For Safari */
+  position: sticky;
+  left: 0;
+  z-index: 3; /* Above both header and body content */
+}
+.table tbody tr td.sticky-column-ubah:nth-child(2) {
+  position: -webkit-sticky; /* For Safari */
+  position: sticky;
+  left: 60px; /* = lebar kolom No. (colgroup di FormUbahRL316.js) */
+  z-index: 3; /* Above both header and body content */
+}
+.table tbody tr td.sticky-column-ubah:nth-child(3) {
+  position: -webkit-sticky; /* For Safari */
+  position: sticky;
+  left: 237px;
+  z-index: 3; /* Above both header and body content */
+}
+.table tbody tr td.sticky-column-ubah:nth-child(4) {
+  position: -webkit-sticky; /* For Safari */
+  position: sticky;
+  left: 363px;
+  z-index: 3; /* Above both header and body content */
+}
+
+.table .sticky-header-ubah {
+  position: -webkit-sticky; /* For Safari */
+  position: sticky;
+  top: 0; /* Sticky header */
+  z-index: 2; /* Above table content */
+  background-color: #779d9e;
+  color: white;
+}
+
+.table .sticky-column-ubah {
+  position: -webkit-sticky; /* For Safari */
+  position: sticky;
+  left: 0;
+  z-index: 0; /* Ensures sticky column is above other content */
+  background-color: #fbfefe;
+}

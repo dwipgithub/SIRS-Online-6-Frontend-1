@@ -1,0 +1,58 @@
+/* CSS khusus FormUbahRL318.js — dipisah dari RL318/FormTambahRL318.module.css; hanya kelas yang dipakai file ini */
+/* ===== Tabel standar (mengacu FormTambahRL32.module.css) =====
+   Dipakai FormTambahRL318 dan FormUbahRL318.
+   Lebar 100% (bukan 200% seperti RL 3.2) karena kolomnya sedikit. */
+.table-container {
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    font-size: 15px;
+}
+
+.table th,
+.table td {
+    padding: 8px;
+    border: 1px solid #ddd;
+    vertical-align: middle;
+}
+
+.table thead th {
+    background-color: #fbfefe;
+    color: grey;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.table thead th.sticky-header:nth-child(1),
+.table thead th.sticky-header:nth-child(2),
+.table thead th.sticky-header:nth-child(3) {
+    position: -webkit-sticky;
+    position: sticky;
+    left: 0;
+    z-index: 3;
+}
+
+.table .sticky-header {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    background-color: white;
+    z-index: 2;
+}
+
+.table .sticky-column {
+    position: -webkit-sticky;
+    position: sticky;
+    left: 0;
+    background-color: white;
+    z-index: 1;
+}

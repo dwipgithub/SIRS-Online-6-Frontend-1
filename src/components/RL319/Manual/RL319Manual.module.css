@@ -1,0 +1,115 @@
+/* CSS khusus RL319.js — dipisah dari RL319/RL319.module.css; hanya kelas yang dipakai file ini */
+.table-container {
+  max-height: 500px;
+  /* Adjust the height as needed */
+  overflow-y: auto;
+}
+
+.table {
+  width: 200%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  font-size: 15px;
+  font-family: "Times New Roman", Times, serif; /* Set font family */
+  /* Ensures column widths are consistent */
+}
+
+.table th,
+.table td {
+  padding: 8px;
+  border: 1px solid #ddd;
+}
+
+.table thead th {
+  background-color: #fbfefe;
+  color: #59636e;
+  position: -webkit-sticky;
+  /* For Safari */
+  position: sticky;
+  top: 0;
+  /* Keeps the main header at the top */
+  z-index: 2;
+  /* Ensures the main header is above other content */
+  text-align: center;
+  vertical-align: middle;
+}
+
+.table .subheader-row th {
+  background-color: #fbfefe;
+  position: -webkit-sticky;
+  /* For Safari */
+  position: sticky;
+  top: 40px;
+  /* Adjust this to the height of the main header row */
+  z-index: 1;
+  /* Ensures the subheader is below the main header */
+}
+
+/* Sebelumnya semua sel isi diberi position: sticky; top: 0, sehingga saat
+   tabel di-scroll ke bawah setiap baris menempel di atas dan menumpuk.
+   Sticky hanya untuk kolom tertentu (lihat .sticky-column). */
+.table tbody td {
+  background-color: #fbfefe;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.table tbody td.sticky-column:nth-child(1),
+.table tbody td.sticky-column:nth-child(2),
+.table tbody td.sticky-column:nth-child(3) {
+  position: -webkit-sticky; /* For Safari */
+  position: sticky;
+  left: 0;
+  z-index: 3; /* Above both header and body content */
+}
+
+.table thead th.sticky-header:nth-child(1),
+.table thead th.sticky-header:nth-child(2),
+.table thead th.sticky-header:nth-child(3) {
+  position: -webkit-sticky; /* For Safari */
+  position: sticky;
+  left: 0;
+  z-index: 3; /* Above both header and body content */
+}
+
+.table .sticky-header {
+  position: -webkit-sticky; /* For Safari */
+  position: sticky;
+  top: 0; /* Sticky header */
+  z-index: 2; /* Above table content */
+}
+
+.table .sticky-column {
+  position: -webkit-sticky; /* For Safari */
+  position: sticky;
+  left: 0;
+  z-index: 1; /* Ensures sticky column is above other content */
+}
+
+/* ===== Halaman RL 3.19: kolom 1-3 sticky berjajar (tidak menumpuk) =====
+   Lebar kolom di <colgroup> RL319.js dalam persen dari lebar TABEL
+   (4.5%, 10%, 25%, ...). Persen pada left sticky dihitung dari lebar WADAH,
+   dan tabel = 133% wadah, jadi left = 1.33 x jumlah persen kolom di kirinya. */
+.table thead th.sticky-header.sticky-1,
+.table tbody td.sticky-column.sticky-1 {
+  left: 0;
+  z-index: 3;
+}
+
+.table thead th.sticky-header.sticky-2,
+.table tbody td.sticky-column.sticky-2 {
+  left: 5.985%; /* 1.33 x 4.5% */
+  z-index: 3;
+}
+
+.table thead th.sticky-header.sticky-3,
+.table tbody td.sticky-column.sticky-3 {
+  left: 19.285%; /* 1.33 x (4.5% + 10%) */
+  z-index: 3;
+}
+
+.table thead th.sticky-header.sticky-1,
+.table thead th.sticky-header.sticky-2,
+.table thead th.sticky-header.sticky-3 {
+  z-index: 4; /* judul di atas sel isi saat keduanya menempel */
+}

@@ -1,0 +1,89 @@
+/* Tabel halaman tampilan RL - mengikuti gaya RL 3.2 (dipakai RL 3.11, 3.12, 3.14, 3.16, 3.18, 4.2, 4.3, 5.2) */
+.table-container {
+    max-height: 500px;
+    overflow: auto;
+}
+
+.table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    table-layout: fixed;
+    font-size: 15px;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.table th,
+.table td {
+    padding: 8px;
+    border-right: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    background-color: #ffffff;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.table tr > :first-child {
+    border-left: 1px solid #ddd;
+}
+
+.table thead th {
+    background-color: #fbfefe;
+    color: #59636e;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+}
+
+.table thead tr:first-child th {
+    border-top: 1px solid #ddd;
+}
+
+/* kolom yang punya rowSpan di header tidak punya border-left di baris ke-2 */
+.table thead tr.subheader-row th:first-child {
+    border-left: none;
+}
+
+.table thead tr.subheader-row th {
+    top: 40px;
+    z-index: 1;
+}
+
+.text-left {
+    text-align: left !important;
+}
+
+.aksi {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+}
+
+/* Baris group & sub group */
+.group-row td {
+    background-color: #C4DFAA;
+    font-weight: bold;
+}
+
+.subgroup-row td {
+    background-color: #90C8AC;
+    font-weight: bold;
+}
+
+.total-row td {
+    background-color: #fbfefe;
+    font-weight: bold;
+}
+
+.table tbody tr:hover td {
+    background-color: #f2f2f2;
+}
+
+.table tbody tr.group-row:hover td {
+    background-color: #b6d69a;
+}
+
+.table tbody tr.subgroup-row:hover td {
+    background-color: #82bd9f;
+}

@@ -1,0 +1,84 @@
+/* ===== Beranda: data rumah sakit muncul bertahap =====
+   --i (diisi di beranda.js) = urutan kemunculan elemen. */
+
+:root {
+  --br-step: 70ms; /* jeda antar elemen */
+  --br-start: 150ms; /* jeda sebelum elemen pertama */
+}
+
+/* Kotak data: naik dari bawah, memudar masuk, blur menjadi tajam */
+.br-reveal {
+  opacity: 0;
+  animation: br-rise 0.55s cubic-bezier(0.2, 0.9, 0.3, 1.15) forwards;
+  animation-delay: calc(var(--br-start) + var(--i, 0) * var(--br-step));
+}
+
+@keyframes br-rise {
+  0% {
+    opacity: 0;
+    transform: translateY(16px) scale(0.97);
+    filter: blur(6px);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+/* Judul bagian: geser dari kiri + garis aksen biru-cokelat yang memanjang */
+.br-reveal-title {
+  position: relative;
+  display: inline-block;
+  padding-bottom: 4px;
+  opacity: 0;
+  animation: br-slide 0.5s cubic-bezier(0.2, 0.9, 0.3, 1) forwards;
+  animation-delay: calc(var(--br-start) + var(--i, 0) * var(--br-step));
+}
+
+.br-reveal-title::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: 100%;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #1f5fa8, #8b5a2b);
+  transform: scaleX(0);
+  transform-origin: left;
+  animation: br-underline 0.6s ease-out forwards;
+  animation-delay: calc(
+    var(--br-start) + var(--i, 0) * var(--br-step) + 0.2s
+  );
+}
+
+@keyframes br-slide {
+  0% {
+    opacity: 0;
+    transform: translateX(-18px);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes br-underline {
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* Hormati pengguna yang meminta animasi minimal: tampil langsung */
+@media (prefers-reduced-motion: reduce) {
+  .br-reveal,
+  .br-reveal-title {
+    opacity: 1;
+    animation: none;
+  }
+  .br-reveal-title::after {
+    transform: none;
+    animation: none;
+  }
+}

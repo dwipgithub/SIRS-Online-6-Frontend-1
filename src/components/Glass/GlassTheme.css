@@ -1,0 +1,666 @@
+/* =====================================================================
+   Tema Kaca (Glassmorphism) - biru & cokelat
+   Aktif hanya ketika <body> memiliki class "glass-theme"
+   (lihat useGlassTheme.js). Banyak aturan memakai !important karena
+   halaman lama memakai inline style untuk warna.
+   ===================================================================== */
+
+body.glass-theme {
+  --gl-text: #14233a;
+  --gl-muted: #4b5a6e;
+  --gl-blue: #1f5fa8;
+  --gl-blue-deep: #0d2c54;
+  --gl-brown: #8b5a2b;
+  --gl-brown-light: #d9a066;
+  --gl-panel: rgba(255, 255, 255, 0.38);
+  --gl-panel-strong: rgba(255, 255, 255, 0.55);
+  --gl-edge: rgba(255, 255, 255, 0.6);
+  --gl-line: rgba(255, 255, 255, 0.55);
+  /* garis dalam tabel: coklat tipis (sama dengan tabel RL 3.2) */
+  --gl-table-line: rgba(164, 117, 81, 0.4);
+  --gl-shadow: 0 20px 50px rgba(13, 30, 55, 0.22);
+  --gl-blur: blur(22px) saturate(170%);
+
+  /* Latar biru & cokelat penuh agar kaca terlihat nyata */
+  background:
+    radial-gradient(ellipse 600px 500px at 8% 10%, rgba(31, 95, 168, 0.9), transparent 70%),
+    radial-gradient(ellipse 560px 480px at 85% 15%, rgba(139, 90, 43, 0.75), transparent 70%),
+    radial-gradient(ellipse 600px 520px at 70% 90%, rgba(13, 44, 84, 0.85), transparent 70%),
+    radial-gradient(ellipse 480px 420px at 15% 85%, rgba(217, 160, 102, 0.75), transparent 70%),
+    radial-gradient(ellipse 420px 360px at 45% 50%, rgba(111, 168, 220, 0.55), transparent 70%),
+    linear-gradient(135deg, #2a5d93 0%, #6e7d8e 50%, #9a6b43 100%) !important;
+  background-attachment: fixed !important;
+  color: var(--gl-text);
+}
+
+/* ---------- Panel utama halaman ---------- */
+/* Efek kaca dipasang di ::before (bukan di elemen itu sendiri) agar
+   backdrop-filter tidak mengubah posisi elemen fixed di dalamnya
+   (mis. ToastContainer). */
+body.glass-theme #root > .container {
+  position: relative;
+  isolation: isolate;
+  padding: 28px 28px 32px;
+}
+
+body.glass-theme #root > .container::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  border-radius: 28px;
+  background:
+    linear-gradient(150deg, rgba(255, 255, 255, 0.55) 0%, rgba(255, 255, 255, 0.28) 60%, rgba(255, 255, 255, 0.2) 100%);
+  backdrop-filter: var(--gl-blur);
+  -webkit-backdrop-filter: var(--gl-blur);
+  border: 1px solid var(--gl-edge);
+  box-shadow:
+    inset 1.5px 1.5px 0 rgba(255, 255, 255, 0.8),
+    inset -1px -1px 0 rgba(255, 255, 255, 0.2),
+    var(--gl-shadow);
+}
+
+/* Desktop: tepi atas & bawah panel sejajar dengan sidebar
+   (sidebar memakai top/bottom: var(--gs-gap) di NavigationBar.css) */
+@media (min-width: 992px) {
+  body.glass-theme #root > .container {
+    margin-top: var(--gs-gap, 14px) !important;
+    margin-bottom: var(--gs-gap, 14px) !important;
+  }
+}
+
+/* Layar kecil: beri jarak kiri-kanan agar panel tidak menempel tepi layar */
+@media (max-width: 991.98px) {
+  body.glass-theme #root > .container {
+    width: auto;
+    max-width: none;
+    margin-left: 10px;
+    margin-right: 10px;
+    padding: 20px 16px 24px;
+  }
+}
+
+/* ---------- Teks ---------- */
+body.glass-theme #root > .container h2,
+body.glass-theme #root > .container h4,
+body.glass-theme #root > .container h5 {
+  color: var(--gl-text);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+body.glass-theme #root > .container h4 span,
+body.glass-theme #root > .container [style*="color: gray"] {
+  color: var(--gl-text) !important;
+}
+
+body.glass-theme #root > .container h5[style] {
+  color: var(--gl-muted);
+  font-weight: 500;
+}
+
+/* ---------- Card ---------- */
+body.glass-theme .card {
+  background: rgba(255, 255, 255, 0.32);
+  border: 1px solid var(--gl-edge);
+  border-radius: 20px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), 0 8px 24px rgba(13, 30, 55, 0.12);
+}
+
+body.glass-theme .card-title {
+  color: var(--gl-text);
+  font-weight: 600;
+}
+
+/* ---------- Tombol ---------- */
+body.glass-theme .btn {
+  position: relative;
+  border-radius: 14px !important;
+  padding: 0.45rem 1.1rem;
+  font-weight: 600;
+  color: #fff !important;
+  border: 1px solid rgba(255, 255, 255, 0.45) !important;
+  background:
+    linear-gradient(160deg, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.05) 55%),
+    linear-gradient(135deg, rgba(31, 95, 168, 0.8), rgba(13, 44, 84, 0.8)) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.6),
+    0 6px 16px rgba(13, 30, 55, 0.25);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+}
+
+body.glass-theme .btn:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.08);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.7),
+    0 10px 22px rgba(13, 30, 55, 0.3);
+}
+
+body.glass-theme .btn:active {
+  transform: translateY(0);
+}
+
+body.glass-theme .btn:focus-visible {
+  outline: 2px solid var(--gl-brown-light);
+  outline-offset: 2px;
+}
+
+body.glass-theme .btn:disabled,
+body.glass-theme .btn.disabled {
+  opacity: 0.55;
+  transform: none;
+}
+
+/* Simpan / Terapkan */
+body.glass-theme .btn-outline-success {
+  background:
+    linear-gradient(160deg, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.05) 55%),
+    linear-gradient(135deg, rgba(25, 135, 110, 0.85), rgba(15, 95, 80, 0.85)) !important;
+}
+
+/* Ubah */
+body.glass-theme .btn-warning {
+  background:
+    linear-gradient(160deg, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.05) 55%),
+    linear-gradient(135deg, rgba(217, 160, 102, 0.9), rgba(139, 90, 43, 0.9)) !important;
+}
+
+/* Hapus */
+body.glass-theme .btn-danger {
+  background:
+    linear-gradient(160deg, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.05) 55%),
+    linear-gradient(135deg, rgba(220, 85, 75, 0.88), rgba(160, 45, 40, 0.88)) !important;
+}
+
+/* Tombol kecil di dalam tabel */
+body.glass-theme table .btn {
+  padding: 0.3rem 0.7rem;
+  font-size: 0.82rem;
+  border-radius: 10px !important;
+}
+
+/* ---------- Tab ---------- */
+body.glass-theme .nav-tabs {
+  border-bottom: 0;
+  gap: 6px;
+  padding: 5px;
+  display: inline-flex;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.25);
+  border: 1px solid var(--gl-edge);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+body.glass-theme .nav-tabs .nav-link {
+  border: 0;
+  border-radius: 12px;
+  color: var(--gl-muted);
+  font-weight: 600;
+  padding: 0.4rem 1.1rem;
+  background: transparent;
+}
+
+body.glass-theme .nav-tabs .nav-link:hover {
+  color: var(--gl-text);
+  background: rgba(255, 255, 255, 0.35);
+}
+
+body.glass-theme .nav-tabs .nav-link.active {
+  color: var(--gl-blue-deep);
+  background: rgba(255, 255, 255, 0.75);
+  box-shadow: inset 0 1px 0 #fff, 0 4px 12px rgba(13, 30, 55, 0.15);
+}
+
+/* ---------- Form ---------- */
+body.glass-theme .form-control,
+body.glass-theme .form-select {
+  color: var(--gl-text);
+  background-color: rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-radius: 12px;
+  box-shadow: inset 0 1px 3px rgba(13, 30, 55, 0.08);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+}
+
+body.glass-theme .form-control:focus,
+body.glass-theme .form-select:focus {
+  color: var(--gl-text);
+  background-color: rgba(255, 255, 255, 0.78);
+  border-color: rgba(31, 95, 168, 0.6);
+  box-shadow: 0 0 0 3px rgba(31, 95, 168, 0.2);
+}
+
+body.glass-theme .form-control:disabled,
+body.glass-theme .form-select:disabled {
+  color: var(--gl-text);
+  background-color: rgba(255, 255, 255, 0.25);
+  opacity: 1;
+}
+
+body.glass-theme .form-floating > label {
+  color: var(--gl-muted);
+}
+
+/* Label floating Bootstrap punya latar sendiri saat naik; dibuat transparan */
+body.glass-theme .form-floating > .form-control:focus ~ label::after,
+body.glass-theme .form-floating > .form-control:not(:placeholder-shown) ~ label::after,
+body.glass-theme .form-floating > .form-select ~ label::after,
+body.glass-theme .form-floating > .form-control:disabled ~ label::after {
+  background-color: transparent !important;
+}
+
+body.glass-theme .form-floating {
+  padding-right: 4px;
+  margin-bottom: 4px;
+}
+
+body.glass-theme .form-check-input {
+  width: 1.2em;
+  height: 1.2em;
+  background-color: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(13, 44, 84, 0.35);
+  cursor: pointer;
+}
+
+body.glass-theme .form-check-input:checked {
+  background-color: var(--gl-blue);
+  border-color: var(--gl-blue);
+}
+
+/* ---------- Tabel ---------- */
+body.glass-theme #root > .container [class*="table-container"] {
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.22);
+  border: 1px solid var(--gl-edge);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6), 0 8px 24px rgba(13, 30, 55, 0.12);
+  scrollbar-width: thin;
+  scrollbar-color: rgba(13, 44, 84, 0.35) transparent;
+}
+
+body.glass-theme #root > .container table {
+  font-family: inherit !important;
+  font-size: 0.88rem !important;
+  color: var(--gl-text);
+  border-collapse: separate !important;
+  border-spacing: 0;
+}
+
+body.glass-theme #root > .container table th,
+body.glass-theme #root > .container table td {
+  border: 0 !important;
+  border-right: 1px solid var(--gl-table-line) !important;
+  border-bottom: 1px solid var(--gl-table-line) !important;
+  padding: 6px 8px;
+}
+
+/* Header tabel dibuat sticky sebagai satu kesatuan (thead), bukan per baris.
+   CSS lama memakai top: 40px untuk baris sub-header; bila tinggi baris
+   pertama tidak tepat 40px, sub-header turun/bertumpuk sehingga sel hasil
+   merge (colspan/rowspan) tidak rapat. */
+body.glass-theme #root > .container [class*="table-container"] table thead {
+  position: sticky;
+  top: 0;
+  z-index: 4;
+}
+
+body.glass-theme #root > .container table thead th {
+  top: auto !important;
+  vertical-align: middle !important;
+  text-align: center;
+}
+
+/* Header tabel: kaca lebih pekat (sticky, jadi harus cukup buram) */
+body.glass-theme #root > .container table thead th {
+  color: var(--gl-blue-deep) !important;
+  font-weight: 700;
+  font-size: 0.8rem;
+  text-transform: none;
+  /* pekat: header menempel di atas baris yang digulir, jadi tidak boleh
+     tembus pandang (angka baris di bawahnya ikut terlihat) */
+  background: #e1ebf7 !important;
+}
+
+/* Header di luar thead / tabel rlTable (latar #779D9E di CSS lama) */
+body.glass-theme #root > .container table th {
+  color: var(--gl-blue-deep) !important;
+  background: rgba(225, 235, 247, 0.94) !important;
+  text-align: center;
+  vertical-align: middle;
+}
+
+/* Tabel Bootstrap (react-bootstrap <Table>) punya latar putih sendiri */
+body.glass-theme #root > .container .table {
+  --bs-table-bg: transparent;
+  --bs-table-color: var(--gl-text);
+  --bs-table-striped-bg: rgba(255, 255, 255, 0.18);
+  --bs-table-hover-bg: rgba(255, 255, 255, 0.3);
+  --bs-table-border-color: var(--gl-table-line);
+  margin-bottom: 0;
+}
+
+/* Baris belang & hover bawaan rlTable */
+body.glass-theme #root > .container table tbody tr {
+  background-color: transparent !important;
+}
+/* Latar sel isi tabel: putih hampir pekat (baris genap kebiruan tipis)
+   agar gradien latar halaman tidak bercampur dengan kolom data, dan semua
+   tabel seragam apa pun CSS bawaannya. Baris kelompok (group-row /
+   subgroup-row) dikecualikan agar warna hijaunya tetap tampil. Kolom
+   cokelat (gl-lead / sticky-column) & baris berwarna khusus memakai
+   !important sehingga tidak tertimpa aturan ini. */
+body.glass-theme #root > .container table tbody tr:not([class*="group-row"]) td {
+  background-color: rgba(255, 255, 255, 0.94);
+}
+body.glass-theme #root > .container table tbody tr:not([class*="group-row"]):nth-child(even) td {
+  background-color: rgba(240, 245, 251, 0.96);
+}
+
+body.glass-theme #root > .container .table-primary > td,
+body.glass-theme #root > .container .table-primary > th,
+body.glass-theme #root > .container tr.table-primary td {
+  background: rgba(31, 95, 168, 0.18) !important;
+  font-weight: 600;
+}
+
+/* Wadah tabel tanpa class table-container (mis. table-responsive) */
+body.glass-theme #root > .container .table-responsive {
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.22);
+  border: 1px solid var(--gl-edge);
+}
+
+/* Kolom sticky di kiri harus menutupi isi yang di-scroll */
+body.glass-theme #root > .container table td[class*="sticky-column"] {
+  /* pekat (bukan 0.95) agar isi yang tergeser ke belakangnya tidak tembus */
+  background: #f0ece6 !important;
+}
+
+body.glass-theme #root > .container table tbody tr:not([class*="group-row"]):hover td {
+  background-color: rgba(225, 235, 247, 0.98);
+}
+
+body.glass-theme #root > .container table tbody tr:hover td[class*="sticky-column"] {
+  background: #faf7f3 !important;
+}
+
+/* Input di dalam tabel.
+   --gl-input-pad-x juga dipakai sel teks "gl-pad" (lihat bagian bawah),
+   jadi ubah jarak horizontal input lewat variabel ini saja. */
+body.glass-theme #root > .container table {
+  --gl-input-pad-x: 0.5rem;
+}
+
+body.glass-theme #root > .container table .form-control {
+  border-radius: 10px;
+  padding: 0.3rem var(--gl-input-pad-x);
+  font-size: 0.85rem;
+  min-height: 0;
+}
+
+/* Input read-only di tabel tampil seperti teks biasa */
+body.glass-theme #root > .container table .form-control:disabled {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+/* ---------- Kotak isi tab (bg-white / bg-light) ---------- */
+body.glass-theme #root > .container .bg-white,
+body.glass-theme #root > .container .bg-light {
+  background: rgba(255, 255, 255, 0.3) !important;
+  border-color: var(--gl-edge) !important;
+  border-radius: 20px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6), 0 8px 24px rgba(13, 30, 55, 0.12) !important;
+}
+
+body.glass-theme #root > .container .rounded-bottom {
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
+}
+
+/* Tombol varian lain */
+body.glass-theme .btn-primary,
+body.glass-theme .btn-info {
+  background:
+    linear-gradient(160deg, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.05) 55%),
+    linear-gradient(135deg, rgba(31, 95, 168, 0.85), rgba(13, 44, 84, 0.85)) !important;
+}
+
+body.glass-theme .btn-success {
+  background:
+    linear-gradient(160deg, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.05) 55%),
+    linear-gradient(135deg, rgba(25, 135, 110, 0.85), rgba(15, 95, 80, 0.85)) !important;
+}
+
+body.glass-theme .btn-light {
+  color: var(--gl-text) !important;
+  text-shadow: none;
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.45)) !important;
+}
+
+/* ---------- Modal ---------- */
+body.glass-theme .modal-backdrop.show {
+  opacity: 1;
+  background: rgba(13, 30, 55, 0.35);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+body.glass-theme .modal-content {
+  color: var(--gl-text);
+  border-radius: 26px;
+  background: linear-gradient(150deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.45));
+  backdrop-filter: var(--gl-blur);
+  -webkit-backdrop-filter: var(--gl-blur);
+  border: 1px solid var(--gl-edge);
+  box-shadow: inset 1.5px 1.5px 0 rgba(255, 255, 255, 0.85), var(--gl-shadow);
+}
+
+body.glass-theme .modal-header,
+body.glass-theme .modal-footer {
+  border-color: rgba(255, 255, 255, 0.6);
+}
+
+body.glass-theme .modal-title {
+  font-weight: 700;
+}
+
+/* ---------- Dialog konfirmasi (react-confirm-alert) ---------- */
+body.glass-theme .react-confirm-alert-overlay {
+  background: rgba(13, 30, 55, 0.35);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+body.glass-theme .react-confirm-alert-body {
+  color: var(--gl-text);
+  border-radius: 24px;
+  background: linear-gradient(150deg, rgba(255, 255, 255, 0.78), rgba(255, 255, 255, 0.5));
+  backdrop-filter: var(--gl-blur);
+  -webkit-backdrop-filter: var(--gl-blur);
+  border: 1px solid var(--gl-edge);
+  box-shadow: inset 1.5px 1.5px 0 rgba(255, 255, 255, 0.85), var(--gl-shadow);
+}
+
+body.glass-theme .react-confirm-alert-button-group > button {
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  background: linear-gradient(135deg, rgba(31, 95, 168, 0.85), rgba(13, 44, 84, 0.85));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+/* ---------- Tanpa dukungan backdrop-filter ---------- */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  body.glass-theme #root > .container::before,
+  body.glass-theme .modal-content,
+  body.glass-theme .react-confirm-alert-body {
+    background: rgba(255, 255, 255, 0.92);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.glass-theme .btn {
+    transition: none;
+  }
+}
+
+/* ---------- Angka di tabel rata kanan ----------
+   - input type="number" selalu berisi angka -> langsung rata kanan
+   - sel/input teks berisi angka ditandai "gl-num" oleh useGlassTheme.js
+   !important diperlukan karena banyak sel memakai style inline
+   textAlign: "center". Header (th) tidak diubah. */
+body.glass-theme #root table td input[type="number"],
+body.glass-theme #root table td input.gl-num,
+body.glass-theme #root table td.gl-num {
+  text-align: right !important;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Jarak dalam sel tabel seragam ----------
+   Isi kotak input berjarak (padding input + garis tepi) dari tepi sel,
+   sedangkan teks biasa (mis. baris Total) tidak. Sel teks di tabel yang
+   berisi input ("gl-pad", ditandai useGlassTheme.js) diberi jarak yang
+   sama agar isinya sejajar. */
+/* Nilai bawaan untuk tabel di luar panel .container (padding-x Bootstrap);
+   tabel di dalam panel memakai 0.5rem (lihat "Input di dalam tabel") */
+body.glass-theme #root table {
+  --gl-input-pad-x: 0.75rem;
+}
+
+body.glass-theme #root table td.gl-pad {
+  padding-left: calc(8px + var(--gl-input-pad-x) + 1px) !important;
+  padding-right: calc(8px + var(--gl-input-pad-x) + 1px) !important;
+}
+
+/* ---------- Kolom 1-3 berwarna cokelat di semua tabel ----------
+   Sama dengan sel sticky-column di tabel RL 3.2. Sel ditandai "gl-lead"
+   oleh useGlassTheme.js (posisi kolom memperhitungkan colSpan). */
+body.glass-theme #root table td.gl-lead {
+  background: #f0ece6 !important;
+}
+
+body.glass-theme #root table tbody tr:hover td.gl-lead {
+  background: #faf7f3 !important;
+}
+
+/* Judul kolom sticky juga pekat, agar judul kolom yang tergeser
+   ke belakangnya tidak terlihat tembus */
+body.glass-theme #root table thead th[class*="sticky-header"] {
+  background: #e1ebf7 !important;
+}
+
+/* ---------- Label "Total" rata kiri & tebal di semua tabel ----------
+   Sel ditandai "gl-total" oleh useGlassTheme.js. !important diperlukan
+   karena banyak sel Total memakai style inline textAlign: "center". */
+body.glass-theme #root table td.gl-total {
+  text-align: left !important;
+  font-weight: 700;
+}
+
+/* ---------- Tombol "Kembali" (halaman tambah/ubah) ----------
+   <Link className="gl-back">
+     <span className="gl-back-icon"><ArrowLeft /></span>
+     <span className="gl-back-text"><small>Kembali ke</small><strong>…</strong></span>
+   </Link> */
+.gl-back {
+  /* flex + fit-content: berdiri di barisnya sendiri dengan lebar sesuai isi,
+     sehingga jarak ke elemen di bawahnya tidak terpengaruh tinggi baris */
+  display: flex;
+  width: fit-content;
+  margin-bottom: var(--gl-back-gap, 0.5rem);
+  align-items: center;
+  gap: 12px;
+  padding: 6px 18px 6px 6px;
+  border-radius: 999px;
+  text-decoration: none;
+  color: #0d2c54;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.4));
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 6px 18px rgba(13, 30, 55, 0.14);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.gl-back:hover,
+.gl-back:focus-visible {
+  color: #0d2c54;
+  transform: translateY(-1px);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.55));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 1),
+    0 10px 24px rgba(13, 30, 55, 0.2);
+}
+
+.gl-back:focus-visible {
+  outline: 2px solid #1f5fa8;
+  outline-offset: 2px;
+}
+
+.gl-back-icon {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  color: #fff;
+  background: linear-gradient(135deg, #1f5fa8, #0d2c54 55%, #8b5a2b);
+  box-shadow: 0 4px 12px rgba(13, 44, 84, 0.3);
+  transition: transform 0.25s cubic-bezier(0.3, 1.5, 0.5, 1);
+}
+
+.gl-back:hover .gl-back-icon {
+  transform: translateX(-3px);
+}
+
+.gl-back-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+  text-align: left;
+}
+
+.gl-back-text small {
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: rgba(13, 44, 84, 0.6);
+}
+
+.gl-back-text strong {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #0d2c54;
+}
+
+/* Jarak tombol Kembali ke tabel/kartu di bawahnya seragam di semua halaman
+   (acuan: halaman tambah RL 3.2, mt-2 = 0.5rem). Margin atas elemen
+   berikutnya dinolkan agar jarak hanya ditentukan oleh .gl-back. Wadah
+   spinner yang sedang kosong dilewati. */
+.gl-back + *,
+.gl-back + :empty + * {
+  margin-top: 0 !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gl-back,
+  .gl-back-icon {
+    transition: none;
+  }
+}

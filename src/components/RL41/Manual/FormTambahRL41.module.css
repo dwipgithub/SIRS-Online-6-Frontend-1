@@ -1,0 +1,298 @@
+/* CSS khusus FormTambahRL41.js — dipisah dari RL41/RL41.module.css, RL41/FormTambahRL41.module.css; hanya kelas yang dipakai file ini */
+.table {
+    width: 400%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    font-size: 15px;
+    font-family: 'Times New Roman', Times, serif; /* Set font family */
+    /* Ensures column widths are consistent */
+}
+
+.table th,
+.table td {
+    padding: 8px;
+    border: 1px solid #ddd;
+}
+
+.table thead th {
+    background-color: #fbfefe;
+    color: #59636e;
+    position: -webkit-sticky;
+    /* For Safari */
+    position: sticky;
+    top: 0;
+    /* Keeps the main header at the top */
+    z-index: 2;
+    /* Ensures the main header is above other content */
+    text-align: center;
+    vertical-align: middle;
+}
+
+/* ===== Form Tambah RL 4.1: lembar kerja satu halaman =====
+   Urutan: Periode + Cari (atas, full lebar) -> hasil cari -> isian dua
+   kolom -> baris total & tombol (menempel di bawah layar). */
+
+.topRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 0.5rem;
+}
+
+/* Ringkasan Profile Fasyankes (pengganti kartu besar) */
+.rsInfo {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  color: #0d2c54;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.75);
+}
+
+.rsInfo strong {
+  font-weight: 700;
+}
+
+.rsInfo span {
+  color: rgba(13, 44, 84, 0.65);
+}
+
+/* ---------- Baris Periode + Cari ---------- */
+.searchBar {
+  display: flex;
+  gap: 10px;
+  align-items: stretch;
+  flex-wrap: wrap;
+}
+
+.periode {
+  display: flex;
+  gap: 8px;
+  flex: 0 0 auto;
+}
+
+.periode :global(.form-floating) {
+  width: 150px;
+}
+
+.searchBox {
+  position: relative;
+  flex: 1 1 320px;
+}
+
+.searchSpinner {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.stepLabel {
+  display: inline-block;
+  margin-bottom: 6px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: rgba(13, 44, 84, 0.6);
+}
+
+/* ---------- Hasil pencarian ---------- */
+.results {
+  margin-top: 10px;
+  max-height: 320px;
+  overflow-y: auto;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.45);
+}
+
+.resultItem {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  padding: 10px 14px;
+  border: 0;
+  border-bottom: 1px solid rgba(13, 44, 84, 0.08);
+  background: transparent;
+  text-align: left;
+  color: #0d2c54;
+  cursor: pointer;
+}
+
+.resultItem:last-child {
+  border-bottom: 0;
+}
+
+.resultItem:hover,
+.resultItemActive {
+  background: rgba(31, 95, 168, 0.12);
+}
+
+.resultCode {
+  flex: 0 0 80px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.resultDesc {
+  flex: 1 1 auto;
+}
+
+.resultArrow {
+  flex: 0 0 auto;
+  color: rgba(13, 44, 84, 0.45);
+}
+
+.resultEmpty {
+  padding: 14px;
+  color: rgba(13, 44, 84, 0.65);
+}
+
+/* ---------- Penyakit terpilih ---------- */
+.chosen {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1 1 320px;
+  padding: 8px 8px 8px 14px;
+  border-radius: 12px;
+  background: rgba(31, 95, 168, 0.1);
+  border: 1px solid rgba(31, 95, 168, 0.25);
+  color: #0d2c54;
+}
+
+.chosenCode {
+  font-weight: 700;
+}
+
+.chosenDesc {
+  flex: 1 1 auto;
+}
+
+/* ---------- Isian dua kolom ---------- */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  /* start: tabel kanan (12 baris) tidak diregangkan setinggi tabel kiri
+     (13 baris), sehingga tinggi baris kedua kolom sama */
+  align-items: start;
+}
+
+@media (max-width: 991.98px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Tambahan untuk tabel standar (style.table): sel lebih rapat agar
+   13 baris per kolom tetap ringkas */
+.ageTable th,
+.ageTable td {
+  padding: 4px 8px;
+  vertical-align: middle;
+}
+
+.ageLabel {
+  text-align: left !important;
+  white-space: nowrap;
+}
+
+.lockNote {
+  margin: 0 0 10px;
+  font-size: 0.82rem;
+  color: #8b5a2b;
+}
+
+/* ---------- Baris total & tombol: menempel di bawah layar ---------- */
+.footer {
+  position: sticky;
+  bottom: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+  padding: 12px 16px;
+  border-radius: 16px;
+  background: rgba(240, 236, 230, 0.97);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 -6px 20px rgba(13, 30, 55, 0.12);
+}
+
+.totals {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+  color: #0d2c54;
+}
+
+.totalValue {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.matiGroup {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.statusOk {
+  color: #1f5fa8;
+  font-weight: 700;
+}
+
+.statusBad {
+  color: #c0392b;
+  font-weight: 700;
+}
+
+.inputBad {
+  border-color: #c0392b !important;
+  box-shadow: 0 0 0 2px rgba(192, 57, 43, 0.2) !important;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* Baris "Jumlah Pasien Keluar Mati" di akhir kolom kanan: dipisah garis
+   biru dan diberi latar biru muda agar jelas berbeda dari baris cokelat */
+/* Selektor diawali #root agar mengalahkan aturan tabel di GlassTheme.css
+   (body.glass-theme #root > .container table td { border: 0 !important }) */
+:global(body.glass-theme #root) table tr.matiRow td {
+  /* biru muda (bukan cokelat) agar berbeda dari baris golongan umur;
+     menimpa juga warna cokelat kolom No./Golongan (gl-lead) */
+  border-top: 2px solid #1f5fa8 !important;
+  background: #dbe7f5 !important;
+  color: #0d2c54;
+}
+
+:global(body.glass-theme #root) table tbody tr.matiRow:hover td {
+  background: #e6eef8 !important;
+}
+
+/* Kolom No.: jarak dalam normal & rata tengah. Menimpa jarak tambahan
+   "gl-pad" (GlassTheme.css) yang membuat nomor 2 digit terlipat. */
+:global(body.glass-theme #root) table tbody td.noCell {
+  padding: 4px 6px !important;
+  text-align: center !important;
+}
+
+/* Label baris Keluar Mati boleh turun baris agar tidak terpotong */
+.matiLabel {
+  white-space: normal !important;
+  line-height: 1.25;
+}

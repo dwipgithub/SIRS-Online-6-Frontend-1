@@ -1,0 +1,139 @@
+/* ===== Animasi tampil halaman (Drape) - sama dengan halaman RL 3.2 =====
+   Dipakai semua halaman RL & Absensi: pasang class "drape" pada wadah
+   utama halaman (div.container).
+   - Card kaca (::before milik GlassTheme) terbentang dari atas seperti kain,
+     berayun sedikit lalu diam.
+   - Kilau cahaya (::after) menyapu card setelah terbentang.
+   - Isi halaman turun berurutan; baris tabel muncul bergantian.
+   fill-mode "backwards": setelah animasi tidak tersisa transform/clip-path,
+   sehingga ToastContainer (fixed) dan header/kolom sticky tetap normal. */
+
+@keyframes drape-card {
+    0% {
+        opacity: 0.4;
+        clip-path: inset(0 0 100% 0 round 28px);
+        transform: perspective(1400px) rotateX(-14deg);
+    }
+    55% {
+        opacity: 1;
+        clip-path: inset(0 0 0 0 round 28px);
+        transform: perspective(1400px) rotateX(4deg);
+    }
+    75% {
+        transform: perspective(1400px) rotateX(-1.8deg);
+    }
+    90% {
+        transform: perspective(1400px) rotateX(0.6deg);
+    }
+    100% {
+        opacity: 1;
+        clip-path: inset(0 0 0 0 round 28px);
+        transform: none;
+    }
+}
+
+@keyframes drape-shine {
+    0% {
+        background-position: 160% 0;
+        opacity: 0;
+    }
+    20% {
+        opacity: 1;
+    }
+    100% {
+        background-position: -60% 0;
+        opacity: 0;
+    }
+}
+
+@keyframes drape-item {
+    from {
+        opacity: 0;
+        transform: translateY(-16px);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@keyframes drape-row {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Card kaca */
+:global(body.glass-theme) :global(#root) > .drape::before {
+    transform-origin: top center;
+    animation: drape-card 1s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+
+/* Kilau cahaya */
+:global(body.glass-theme) :global(#root) > .drape::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    border-radius: 28px;
+    background: linear-gradient(
+        110deg,
+        transparent 35%,
+        rgba(255, 255, 255, 0.45) 50%,
+        transparent 65%
+    );
+    background-size: 250% 100%;
+    background-repeat: no-repeat;
+    opacity: 0;
+    animation: drape-shine 1.2s ease 0.7s both;
+}
+
+/* Isi halaman turun berurutan.
+   Dua pola struktur halaman didukung:
+   1) elemen langsung di dalam container (judul, tab, form, dll.)
+   2) elemen di dalam .row > .col-* (tombol, filter, tabel) */
+.drape > :not(:global(.row)),
+.drape > :global(.row) > [class*="col"] > * {
+    animation: drape-item 0.5s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+
+.drape > :not(:global(.row)):nth-child(1),
+.drape > :global(.row) > [class*="col"] > :nth-child(1) { animation-delay: 0.25s; }
+.drape > :not(:global(.row)):nth-child(2),
+.drape > :global(.row) > [class*="col"] > :nth-child(2) { animation-delay: 0.37s; }
+.drape > :not(:global(.row)):nth-child(3),
+.drape > :global(.row) > [class*="col"] > :nth-child(3) { animation-delay: 0.49s; }
+.drape > :not(:global(.row)):nth-child(4),
+.drape > :global(.row) > [class*="col"] > :nth-child(4) { animation-delay: 0.61s; }
+.drape > :not(:global(.row)):nth-child(n + 5),
+.drape > :global(.row) > [class*="col"] > :nth-child(n + 5) { animation-delay: 0.7s; }
+
+/* Baris tabel muncul bergantian (opacity saja agar kolom sticky aman) */
+.drape tbody tr {
+    animation: drape-row 0.4s ease backwards;
+}
+
+.drape tbody tr:nth-child(1) { animation-delay: 0.03s; }
+.drape tbody tr:nth-child(2) { animation-delay: 0.06s; }
+.drape tbody tr:nth-child(3) { animation-delay: 0.09s; }
+.drape tbody tr:nth-child(4) { animation-delay: 0.12s; }
+.drape tbody tr:nth-child(5) { animation-delay: 0.15s; }
+.drape tbody tr:nth-child(6) { animation-delay: 0.18s; }
+.drape tbody tr:nth-child(7) { animation-delay: 0.21s; }
+.drape tbody tr:nth-child(8) { animation-delay: 0.24s; }
+.drape tbody tr:nth-child(9) { animation-delay: 0.27s; }
+.drape tbody tr:nth-child(n + 10) { animation-delay: 0.3s; }
+
+@media (prefers-reduced-motion: reduce) {
+    :global(body.glass-theme) :global(#root) > .drape::before,
+    :global(body.glass-theme) :global(#root) > .drape::after,
+    .drape > :not(:global(.row)),
+    .drape > :global(.row) > [class*="col"] > *,
+    .drape tbody tr {
+        animation: none;
+    }
+}

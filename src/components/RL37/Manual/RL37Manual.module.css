@@ -1,0 +1,111 @@
+/* CSS khusus RL37.js — dipisah dari RL37/RL37.module.css; hanya kelas yang dipakai file ini */
+/* Tampilan tabel halaman RL 3.7 - mengikuti gaya RL 3.2 */
+.table-container {
+    max-height: 500px;
+    overflow: auto;
+}
+
+.table {
+    /* 60 + 170 + 260 + (14 x 120) */
+    width: 2170px;
+    min-width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    table-layout: fixed;
+    font-size: 15px;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.table th,
+.table td {
+    padding: 8px;
+    border-right: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    background-color: #ffffff;
+}
+
+.table tr > :first-child {
+    border-left: 1px solid #ddd;
+}
+
+.table thead th {
+    background-color: #fbfefe;
+    color: #59636e;
+    border-top: 1px solid #ddd;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    text-align: center;
+    vertical-align: middle;
+    width: 120px;
+}
+
+.table td {
+    text-align: center;
+    vertical-align: middle;
+}
+
+/* Lebar kolom tetap & posisi sticky harus sama persis agar tidak berjarak */
+.col-no {
+    width: 60px !important;
+    left: 0;
+}
+
+.col-aksi {
+    width: 170px !important;
+    left: 60px;
+}
+
+.col-jenis {
+    width: 260px !important;
+    left: 230px;
+    text-align: left !important;
+}
+
+.table thead th.col-no,
+.table thead th.col-aksi,
+.table thead th.col-jenis {
+    position: -webkit-sticky;
+    position: sticky;
+    z-index: 4;
+}
+
+.table thead th.col-jenis {
+    text-align: center !important;
+}
+
+.table tbody td.col-no,
+.table tbody td.col-aksi,
+.table tbody td.col-jenis {
+    position: -webkit-sticky;
+    position: sticky;
+    z-index: 1;
+}
+
+.table tbody td.col-jenis {
+    box-shadow: inset -1px 0 0 #ddd;
+}
+
+/* Baris group & sub group */
+.group-row td {
+    background-color: #C4DFAA;
+    font-weight: bold;
+}
+
+.subgroup-row td {
+    background-color: #90C8AC;
+    font-weight: bold;
+}
+
+.table tbody tr:hover td {
+    background-color: #f2f2f2;
+}
+
+.table tbody tr.group-row:hover td {
+    background-color: #b6d69a;
+}
+
+.table tbody tr.subgroup-row:hover td {
+    background-color: #82bd9f;
+}
