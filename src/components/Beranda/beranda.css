@@ -1,84 +1,105 @@
-/* ===== Beranda: data rumah sakit muncul bertahap =====
-   --i (diisi di beranda.js) = urutan kemunculan elemen. */
+/* ===== Beranda: identitas RS (beranimasi) + ringkasan & status pelaporan ===== */
 
-:root {
-  --br-step: 70ms; /* jeda antar elemen */
-  --br-start: 150ms; /* jeda sebelum elemen pertama */
+.br-sambutan {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-top: 70px;
+  padding: 8px 16px 24px;
+  text-align: left;
 }
 
-/* Kotak data: naik dari bawah, memudar masuk, blur menjadi tajam */
-.br-reveal {
-  opacity: 0;
-  animation: br-rise 0.55s cubic-bezier(0.2, 0.9, 0.3, 1.15) forwards;
-  animation-delay: calc(var(--br-start) + var(--i, 0) * var(--br-step));
+/* Baris atas: identitas di kiri, ringkasan kelengkapan di kanan */
+.br-atas {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px 24px;
+  width: 100%;
 }
 
-@keyframes br-rise {
-  0% {
-    opacity: 0;
-    transform: translateY(16px) scale(0.97);
-    filter: blur(6px);
-  }
-  100% {
-    opacity: 1;
-    transform: none;
-    filter: none;
-  }
+.br-kiri {
+  min-width: 0;
+  max-width: 720px;
 }
 
-/* Judul bagian: geser dari kiri + garis aksen biru-cokelat yang memanjang */
-.br-reveal-title {
+.br-kiri > * {
+  margin: 0;
+}
+
+/* Judul utama: nama RS / nama peran.
+   Animasi saat tampil: teks tersingkap dari kiri ke kanan sambil blur
+   menjadi tajam, lalu garis aksen biru-cokelat memanjang di bawahnya,
+   kemudian alamat muncul. */
+.br-judul {
   position: relative;
   display: inline-block;
-  padding-bottom: 4px;
-  opacity: 0;
-  animation: br-slide 0.5s cubic-bezier(0.2, 0.9, 0.3, 1) forwards;
-  animation-delay: calc(var(--br-start) + var(--i, 0) * var(--br-step));
+  padding-bottom: 6px;
+  font-size: clamp(1.5rem, 3.2vw, 2.1rem);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  color: #14233a;
 }
 
-.br-reveal-title::after {
+.br-judul-teks {
+  display: inline-block;
+  animation: br-singkap 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
+}
+
+.br-judul::after {
   content: "";
   position: absolute;
   left: 0;
   bottom: 0;
-  height: 2px;
   width: 100%;
-  border-radius: 2px;
+  height: 3px;
+  border-radius: 3px;
   background: linear-gradient(90deg, #1f5fa8, #8b5a2b);
-  transform: scaleX(0);
   transform-origin: left;
-  animation: br-underline 0.6s ease-out forwards;
-  animation-delay: calc(
-    var(--br-start) + var(--i, 0) * var(--br-step) + 0.2s
-  );
+  animation: br-garis 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) 0.6s backwards;
 }
 
-@keyframes br-slide {
-  0% {
+.br-alamat {
+  margin-top: 0.45rem !important;
+  font-size: 0.9rem;
+  color: #4b5a6e;
+  animation: br-muncul 0.5s ease 1s backwards;
+}
+
+@keyframes br-singkap {
+  from {
     opacity: 0;
-    transform: translateX(-18px);
+    clip-path: inset(0 100% 0 0);
+    filter: blur(6px);
+    transform: translateY(6px);
   }
-  100% {
-    opacity: 1;
-    transform: none;
-  }
-}
-
-@keyframes br-underline {
   to {
-    transform: scaleX(1);
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+    filter: blur(0);
+    transform: none;
   }
 }
 
-/* Hormati pengguna yang meminta animasi minimal: tampil langsung */
-@media (prefers-reduced-motion: reduce) {
-  .br-reveal,
-  .br-reveal-title {
-    opacity: 1;
-    animation: none;
+@keyframes br-garis {
+  from {
+    transform: scaleX(0);
   }
-  .br-reveal-title::after {
-    transform: none;
+}
+
+@keyframes br-muncul {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .br-judul-teks,
+  .br-judul::after,
+  .br-alamat {
     animation: none;
   }
 }

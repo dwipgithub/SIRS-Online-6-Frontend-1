@@ -7,10 +7,12 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Spinner } from "react-bootstrap";
 import { useCSRFTokenContext } from "../../Context/CSRFTokenContext";
-import { ArrowLeft, Search, ArrowRight, Hospital } from "react-bootstrap-icons";
+import { ArrowLeft, Search, ArrowRight } from "react-bootstrap-icons";
 // Tampilan sama dengan RL 4.1: pakai CSS yang sama agar selalu seragam
 import style from "./FormTambahRL51.module.css"; // kelas tabel standar
 import css from "./FormTambahRL51.module.css"; // tata letak lembar kerja
+import ProfilRSRingkas from "../../Shared/ProfilRSRingkas";
+import pf from "../../Shared/ProfilRSRingkas.module.css";
 
 // Golongan umur RL 5.1 (jumlah kasus baru). Nama field dikirim ke server
 // apa adanya (jangan diubah). Baris terakhir: Jumlah Kunjungan Pasien.
@@ -62,12 +64,14 @@ const angkaKosong = () =>
   Object.fromEntries(SEMUA_NAMA.map((nama) => [nama, 0]));
 
 const FormTambahRL51 = () => {
-  const [tahun, setTahun] = useState(String(new Date().getFullYear()));
+  // Default periode: bulan lalu (Januari -> Desember tahun sebelumnya)
+  const bulanLalu = new Date(new Date().getFullYear(), new Date().getMonth() - 1, 1);
+  const [tahun, setTahun] = useState(String(bulanLalu.getFullYear()));
   const [bulan, setBulan] = useState(
-    String(new Date().getMonth() + 1).padStart(2, "0"),
+    String(bulanLalu.getMonth() + 1).padStart(2, "0"),
   );
-  const [namaRS, setNamaRS] = useState("");
-  const [namaKabKota, setNamaKabKota] = useState("");
+  const [kodeRS, setKodeRS] = useState("");
+  const [profilRS, setProfilRS] = useState(null);
   const [token, setToken] = useState("");
   const [expire, setExpire] = useState("");
 
@@ -112,6 +116,7 @@ const FormTambahRL51 = () => {
       setToken(response.data.accessToken);
       const decoded = jwt_decode(response.data.accessToken);
       setExpire(decoded.exp);
+      setKodeRS(String(decoded.satKerId));
       getRumahSakit(decoded.satKerId, response.data.accessToken);
     } catch (error) {
       if (error.response) {
@@ -143,8 +148,7 @@ const FormTambahRL51 = () => {
       const response = await axios.get("/apisirs6v2/rumahsakit/" + id, {
         headers: { Authorization: `Bearer ${accessToken}` },
       });
-      setNamaRS(response.data.data.nama);
-      setNamaKabKota(response.data.data.kab_kota_nama);
+      setProfilRS(response.data.data);
     } catch (error) {}
   };
 
@@ -428,65 +432,58 @@ const FormTambahRL51 = () => {
     <div className="container" style={{ marginTop: "70px", marginBottom: "40px" }}>
       <ToastContainer />
 
-      <div className={css.topRow}>
-        <Link to={`/rl51`} className="gl-back" style={{ marginBottom: 0 }}>
-          <span className="gl-back-icon" aria-hidden="true">
-            <ArrowLeft size={18} />
-          </span>
-          <span className="gl-back-text">
-            <small>Kembali ke</small>
-            <strong>RL 5.1 Morbiditas Pasien Rawat Jalan</strong>
-          </span>
-        </Link>
-        {namaRS && (
-          <span className={css.rsInfo} title="Rumah sakit akun yang sedang login">
-            <Hospital aria-hidden="true" />
-            <strong>{namaRS}</strong>
-            {namaKabKota && <span>· {namaKabKota}</span>}
-          </span>
-        )}
-      </div>
+      {/* jarak antar-card (Kembali, profil RS, periode, tabel) sama: 1rem */}
+      <Link
+        to={`/rl51`}
+        className="gl-back"
+        style={{ "--gl-back-gap": "1rem" }}
+      >
+        <span className="gl-back-icon" aria-hidden="true">
+          <ArrowLeft size={18} />
+        </span>
+        <span className="gl-back-text">
+          <small>Kembali ke</small>
+          <strong>RL 5.1 Morbiditas Pasien Rawat Jalan</strong>
+        </span>
+      </Link>
 
-      {/* ① Periode + ② Cari penyakit */}
-      <div className="card">
+      {/* ① Periode laporan (di dalam card profil RS) */}
+      <ProfilRSRingkas kode={kodeRS} rs={profilRS}>
+        <div className={pf.periode}>
+          <span className={pf.periodeLabel}>① Periode Laporan</span>
+          <select
+            id="bulan"
+            className={`form-select ${pf.pilih}`}
+            value={String(bulan).padStart(2, "0")}
+            onChange={(e) => setBulan(e.target.value)}
+            aria-label="Bulan"
+          >
+            {BULAN.map((b, i) => (
+              <option key={b} value={String(i + 1).padStart(2, "0")}>
+                {b}
+              </option>
+            ))}
+          </select>
+          <select
+            id="tahun"
+            className={`form-select ${pf.pilih}`}
+            value={tahun}
+            onChange={(e) => setTahun(e.target.value)}
+            aria-label="Tahun"
+          >
+            {years.map((y) => (
+              <option key={y} value={y}>
+                {y}
+              </option>
+            ))}
+          </select>
+        </div>
+      </ProfilRSRingkas>
+
+      {/* ② Cari penyakit */}
+      <div className="card mt-3">
         <div className="card-body">
           <div className={css.searchBar}>
-            <div>
-              <span className={css.stepLabel}>① Periode laporan</span>
-              <div className={css.periode}>
-                <div className="form-floating">
-                  <select
-                    id="bulan"
-                    className="form-select"
-                    value={String(bulan).padStart(2, "0")}
-                    onChange={(e) => setBulan(e.target.value)}
-                  >
-                    {BULAN.map((b, i) => (
-                      <option key={b} value={String(i + 1).padStart(2, "0")}>
-                        {b}
-                      </option>
-                    ))}
-                  </select>
-                  <label htmlFor="bulan">Bulan</label>
-                </div>
-                <div className="form-floating">
-                  <select
-                    id="tahun"
-                    className="form-select"
-                    value={tahun}
-                    onChange={(e) => setTahun(e.target.value)}
-                  >
-                    {years.map((y) => (
-                      <option key={y} value={y}>
-                        {y}
-                      </option>
-                    ))}
-                  </select>
-                  <label htmlFor="tahun">Tahun</label>
-                </div>
-              </div>
-            </div>
-
             <div style={{ flex: "1 1 320px" }}>
               <span className={css.stepLabel}>② Penyakit (ICD 10)</span>
               {terpilih ? (

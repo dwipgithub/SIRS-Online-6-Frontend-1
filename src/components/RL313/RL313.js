@@ -1,11 +1,5 @@
 // Kerangka RL313: tab SIRS (Manual/) & tab SATUSEHAT (SATUSEHAT/).
-// Struktur sama dengan RL34/RL51. Selama SATUSEHAT belum ada, halaman Manual
-// ditampilkan langsung (tanpa tombol tab).
-//
-// Cara mengaktifkan SATUSEHAT:
-//   1. Buat SATUSEHAT/TabSatuSehatRL313.js (+ .module.css), contoh: RL34/SATUSEHAT
-//   2. Ganti baris "const TabSatuSehat = null;" di bawah dengan:
-//        import TabSatuSehat from "./SATUSEHAT/TabSatuSehatRL313";
+// Struktur sama dengan RL34/RL51.
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
@@ -13,15 +7,15 @@ import { useNavigate } from "react-router-dom";
 import { useCSRFTokenContext } from "../Context/CSRFTokenContext";
 import { getStatusSatset } from "../../api/status_satset.js";
 import drape from "../Shared/PageDrape.module.css";
+import style from "../Shared/TabRL.module.css";
 import RL313Manual from "./Manual/RL313Manual";
-
-const TabSatuSehat = null;
+import TabSatuSehat from "./SATUSEHAT/TabSatuSehatRL313";
 
 const JUDUL = "RL 3.13 Rehabilitasi Medik";
 
 // Tab SIRS | SATUSEHAT. Tab SATUSEHAT hanya muncul untuk user rumah sakit
 // (jenisUserId 4) yang status SATUSEHAT-nya aktif.
-const TabMenu = () => {
+const RL313 = () => {
   const [activeTab, setActiveTab] = useState("tab1");
   const { CSRFToken } = useCSRFTokenContext();
   const [user, setUser] = useState({});
@@ -80,16 +74,18 @@ const TabMenu = () => {
 
       <div className="tab-content mt-3">
         <div className={`tab-pane fade ${activeTab === "tab1" ? "show active" : ""}`}>
-          <RL313Manual />
+          <div className={style.card}>
+            <RL313Manual />
+          </div>
         </div>
         <div className={`tab-pane fade ${activeTab === "tab2" ? "show active" : ""}`}>
-          {activeTab === "tab2" && <TabSatuSehat />}
+          <div className={style.card}>
+            {activeTab === "tab2" && <TabSatuSehat />}
+          </div>
         </div>
       </div>
     </div>
   );
 };
-
-const RL313 = () => (TabSatuSehat ? <TabMenu /> : <RL313Manual />);
 
 export default RL313;

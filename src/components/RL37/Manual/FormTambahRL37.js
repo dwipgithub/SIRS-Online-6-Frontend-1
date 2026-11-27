@@ -9,14 +9,16 @@ import "react-toastify/dist/ReactToastify.css";
 import Spinner from "react-bootstrap/Spinner";
 import { useCSRFTokenContext } from "../../Context/CSRFTokenContext";
 import { ArrowLeft } from "react-bootstrap-icons";
+import ProfilRSRingkas from "../../Shared/ProfilRSRingkas";
+import pf from "../../Shared/ProfilRSRingkas.module.css";
 
 const FormTambahRL37 = () => {
-  const [tahun, setTahun] = useState(String(new Date().getFullYear()));
-  const [bulan, setBulan] = useState(String(new Date().getMonth() + 1).padStart(2, "0"));
-  const [namaRS, setNamaRS] = useState("");
-  const [alamatRS, setAlamatRS] = useState("");
-  const [namaPropinsi, setNamaPropinsi] = useState("");
-  const [namaKabKota, setNamaKabKota] = useState("");
+  // Default periode: bulan lalu (Januari -> Desember tahun sebelumnya)
+  const bulanLalu = new Date(new Date().getFullYear(), new Date().getMonth() - 1, 1);
+  const [tahun, setTahun] = useState(String(bulanLalu.getFullYear()));
+  const [bulan, setBulan] = useState(String(bulanLalu.getMonth() + 1).padStart(2, "0"));
+  const [kodeRS, setKodeRS] = useState("");
+  const [profilRS, setProfilRS] = useState(null);
   const [dataRL, setDataRL] = useState([]);
   const [token, setToken] = useState("");
   const [expire, setExpire] = useState("");
@@ -44,6 +46,7 @@ const FormTambahRL37 = () => {
       setToken(response.data.accessToken);
       const decoded = jwt_decode(response.data.accessToken);
       setExpire(decoded.exp);
+      setKodeRS(String(decoded.satKerId));
       getDataRS(decoded.satKerId);
     } catch (error) {
       if (error.response) {
@@ -82,10 +85,7 @@ const FormTambahRL37 = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      setNamaRS(response.data.data.nama);
-      setAlamatRS(response.data.data.alamat);
-      setNamaPropinsi(response.data.data.provinsi_nama);
-      setNamaKabKota(response.data.data.kab_kota_nama);
+      setProfilRS(response.data.data);
     } catch (error) {}
   };
 
@@ -411,132 +411,62 @@ const FormTambahRL37 = () => {
       className="container"
       style={{ marginTop: "70px", marginBottom: "70px" }}
     >
+      {/* jarak antar-card (Kembali, profil RS, periode, tabel) sama: 1rem */}
+      <Link
+        to={`/rl37/`}
+        className="gl-back"
+        style={{ "--gl-back-gap": "1rem" }}
+      >
+        <span className="gl-back-icon" aria-hidden="true">
+          <ArrowLeft size={18} />
+        </span>
+        <span className="gl-back-text">
+          <small>Kembali ke</small>
+          <strong>RL 3.7 Neonatal, Bayi, dan Balita</strong>
+        </span>
+      </Link>
       <form onSubmit={Simpan}>
-        <div className="row">
-          <div className="col-md-6">
-            <div className="card">
-              <div className="card-body">
-                <h5 className="card-title h5">Profile Fasyankes</h5>
-                <div
-                  className="form-floating"
-                  style={{ width: "100%", display: "inline-block" }}
-                >
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="nama"
-                    value={namaRS}
-                    disabled={true}
-                  />
-                  <label htmlFor="nama">Nama</label>
-                </div>
-                <div
-                  className="form-floating"
-                  style={{ width: "100%", display: "inline-block" }}
-                >
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="alamat"
-                    value={alamatRS}
-                    disabled={true}
-                  />
-                  <label htmlFor="alamat">Alamat</label>
-                </div>
-                <div
-                  className="form-floating"
-                  style={{ width: "50%", display: "inline-block" }}
-                >
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="provinsi"
-                    value={namaPropinsi}
-                    disabled={true}
-                  />
-                  <label htmlFor="provinsi">Provinsi </label>
-                </div>
-                <div
-                  className="form-floating"
-                  style={{ width: "50%", display: "inline-block" }}
-                >
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="kabkota"
-                    value={namaKabKota}
-                    disabled={true}
-                  />
-                  <label htmlFor="kabkota">Kab/Kota</label>
-                </div>
-              </div>
-            </div>
+        <ProfilRSRingkas kode={kodeRS} rs={profilRS}>
+          <div className={pf.periode}>
+            <span className={pf.periodeLabel}>Periode Laporan</span>
+            <select
+              value={String(bulan).padStart(2, "0")}
+              name="bulan"
+              className={`form-select ${pf.pilih}`}
+              onChange={(e) => changeHandlerSingle(e)}
+              aria-label="Bulan"
+            >
+              <option value="01">Januari</option>
+              <option value="02">Februari</option>
+              <option value="03">Maret</option>
+              <option value="04">April</option>
+              <option value="05">Mei</option>
+              <option value="06">Juni</option>
+              <option value="07">Juli</option>
+              <option value="08">Agustus</option>
+              <option value="09">September</option>
+              <option value="10">Oktober</option>
+              <option value="11">November</option>
+              <option value="12">Desember</option>
+            </select>
+            <select
+              name="tahun"
+              className={`form-select ${pf.pilih}`}
+              value={tahun}
+              onChange={(e) => changeHandlerSingle(e)}
+              aria-label="Tahun"
+            >
+              {daftarTahun.map((tahun) => (
+                <option key={tahun} value={tahun}>
+                  {tahun}
+                </option>
+              ))}
+            </select>
           </div>
-          <div className="col-md-6">
-            <div className="card">
-              <div className="card-body">
-                <h5 className="card-title h5">Periode Laporan</h5>
-                <div
-                  className="form-floating"
-                  style={{ width: "50%", display: "inline-block" }}
-                >
-                  <select
-                    value={String(bulan).padStart(2, "0")}
-                    name="bulan"
-                    className="form-control"
-                    id="bulan"
-                    onChange={(e) => changeHandlerSingle(e)}
-                  >
-                    <option value="01">Januari</option>
-                    <option value="02">Februari</option>
-                    <option value="03">Maret</option>
-                    <option value="04">April</option>
-                    <option value="05">Mei</option>
-                    <option value="06">Juni</option>
-                    <option value="07">Juli</option>
-                    <option value="08">Agustus</option>
-                    <option value="09">September</option>
-                    <option value="10">Oktober</option>
-                    <option value="11">November</option>
-                    <option value="12">Desember</option>
-                  </select>
-                  <label htmlFor="bulan">Bulan</label>
-                </div>
-                <div
-                  className="form-floating"
-                  style={{ width: "50%", display: "inline-block" }}
-                >
-                  <select
-                    name="tahun"
-                    className="form-control"
-                    id="floatingInput"
-                    value={tahun}
-                    onChange={(e) => changeHandlerSingle(e)}
-                  >
-                    {daftarTahun.map((tahun) => (
-                      <option key={tahun} value={tahun}>
-                        {tahun}
-                      </option>
-                    ))}
-                  </select>
+        </ProfilRSRingkas>
 
-                  <label htmlFor="floatingInput">Tahun</label>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="row mt-3">
+        <div className="row mt-2">
           <div className="col-md-12">
-            <Link to={`/rl37/`} className="gl-back">
-              <span className="gl-back-icon" aria-hidden="true">
-                <ArrowLeft size={18} />
-              </span>
-              <span className="gl-back-text">
-                <small>Kembali ke</small>
-                <strong>RL 3.7 Neonatal, Bayi, dan Balita</strong>
-              </span>
-            </Link>
             <div className="container" style={{ textAlign: "center" }}>
               {spinner && (
                 <Spinner animation="grow" variant="success"></Spinner>

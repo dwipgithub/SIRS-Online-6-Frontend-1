@@ -98,3 +98,93 @@
 .table tbody tr:hover td {
     background-color: #f2f2f2;
 }
+
+/* ===== Penanda loading saat klik Cari ===== */
+.area-tabel {
+  position: relative;
+}
+
+/* Saat tabel masih kosong, beri ruang agar pesan loading terlihat utuh */
+.sedang-memuat {
+  min-height: 220px;
+}
+
+.lapisan-memuat {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 24px;
+  text-align: center;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  animation: muncul-memuat 0.2s ease-out;
+}
+
+.putar {
+  width: 42px;
+  height: 42px;
+  margin-bottom: 6px;
+  border-radius: 50%;
+  border: 4px solid rgba(31, 95, 168, 0.18);
+  border-top-color: #1f5fa8;
+  border-right-color: #8b5a2b;
+  animation: putar-memuat 0.8s linear infinite;
+}
+
+.putar-kecil {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  vertical-align: -2px;
+  border-radius: 50%;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  animation: putar-memuat 0.7s linear infinite;
+}
+
+.teks-memuat {
+  font-weight: 700;
+  font-size: 1rem;
+  color: #0d2c54;
+}
+
+.teks-memuat-kecil {
+  font-size: 0.82rem;
+  color: #4b5a6e;
+}
+
+.pesan-gagal {
+  margin-bottom: 12px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-weight: 600;
+  color: #8a2424;
+  background: rgba(255, 235, 235, 0.9);
+  border: 1px solid rgba(176, 48, 48, 0.35);
+}
+
+@keyframes putar-memuat {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes muncul-memuat {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .putar,
+  .putar-kecil {
+    animation-duration: 2.4s;
+  }
+}

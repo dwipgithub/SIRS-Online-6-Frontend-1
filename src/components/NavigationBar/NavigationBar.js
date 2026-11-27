@@ -17,6 +17,7 @@ import {
 } from "react-bootstrap-icons";
 import SirsLogo from "../Images/SirsLogo";
 import { useCSRFTokenContext } from "../Context/CSRFTokenContext";
+import { namaPeran, isRS } from "../../utils/peran";
 import "./NavigationBar.css";
 
 // Struktur menu sidebar
@@ -365,13 +366,30 @@ const NavigationBar = () => {
         </nav>
 
         <div className="gs-footer">
-          <div className="gs-user" title={user.nama || ""}>
-            <div className="gs-avatar">{inisial}</div>
-            <div className="gs-user-text">
-              <small>Login sebagai</small>
-              <strong>{user.nama || "-"}</strong>
+          {isRS(user) ? (
+            // Akun RS: klik nama RS untuk membuka profil rumah sakit
+            <NavLink
+              to="/profil"
+              className={({ isActive }) =>
+                `gs-user gs-user-link ${isActive ? "active" : ""}`
+              }
+              title={`${user.nama || ""} — lihat profil rumah sakit`}
+            >
+              <div className="gs-avatar">{inisial}</div>
+              <div className="gs-user-text">
+                <small>{namaPeran(user) || "Login sebagai"}</small>
+                <strong>{user.nama || "-"}</strong>
+              </div>
+            </NavLink>
+          ) : (
+            <div className="gs-user" title={user.nama || ""}>
+              <div className="gs-avatar">{inisial}</div>
+              <div className="gs-user-text">
+                <small>{namaPeran(user) || "Login sebagai"}</small>
+                <strong>{user.nama || "-"}</strong>
+              </div>
             </div>
-          </div>
+          )}
           <button
             type="button"
             className="gs-link gs-logout"

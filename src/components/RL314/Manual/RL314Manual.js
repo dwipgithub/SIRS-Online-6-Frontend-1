@@ -12,7 +12,6 @@ import { Link } from "react-router-dom";
 import { Modal } from "react-bootstrap";
 import { downloadExcel } from "react-export-table-to-excel";
 import { useCSRFTokenContext } from "../../Context/CSRFTokenContext";
-import drape from "../../Shared/PageDrape.module.css";
 import FilterSummary from "../../Shared/FilterSummary";
 
 const RL314Manual = () => {
@@ -433,13 +432,7 @@ const RL314Manual = () => {
   };
 
   return (
-    <div
-      className={`container ${drape.drape}`}
-      style={{ marginTop: "70px", marginBottom: "70px" }}
-    >
-      <h4>
-        <span style={{ color: "gray" }}>RL 3.14 Pelayanan Khusus</span>
-      </h4>
+    <div>
       <Modal show={show} onHide={handleClose} style={{ position: "fixed" }}>
         <Modal.Header closeButton>
           <Modal.Title>Filter</Modal.Title>

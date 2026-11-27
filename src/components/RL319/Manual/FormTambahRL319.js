@@ -9,13 +9,13 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useCSRFTokenContext } from "../../Context/CSRFTokenContext";
 import { ArrowLeft } from "react-bootstrap-icons";
+import ProfilRSRingkas from "../../Shared/ProfilRSRingkas";
+import pf from "../../Shared/ProfilRSRingkas.module.css";
 
 const FormTambahRL319 = () => {
   const [tahun, setTahun] = useState("");
-  const [namaRS, setNamaRS] = useState("");
-  const [alamatRS, setAlamatRS] = useState("");
-  const [namaPropinsi, setNamaPropinsi] = useState("");
-  const [namaKabKota, setNamaKabKota] = useState("");
+  const [kodeRS, setKodeRS] = useState("");
+  const [profilRS, setProfilRS] = useState(null);
   const [dataRL, setDataRL] = useState([]);
   const [token, setToken] = useState("");
   const [expire, setExpire] = useState("");
@@ -49,6 +49,7 @@ const FormTambahRL319 = () => {
       setToken(response.data.accessToken);
       const decoded = jwt_decode(response.data.accessToken);
       setExpire(decoded.exp);
+      setKodeRS(String(decoded.satKerId));
       getDataRS(decoded.satKerId);
     } catch (error) {
       if (error.response) {
@@ -88,10 +89,7 @@ const FormTambahRL319 = () => {
         },
       });
       console.log(id);
-      setNamaRS(response.data.data.nama);
-      setAlamatRS(response.data.data.alamat);
-      setNamaPropinsi(response.data.data.provinsi_nama);
-      setNamaKabKota(response.data.data.kab_kota_nama);
+      setProfilRS(response.data.data);
     } catch (error) {}
   };
 
@@ -475,128 +473,45 @@ const FormTambahRL319 = () => {
       className="container"
       style={{ marginTop: "70px", marginBottom: "70px" }}
     >
-      <h2>RL. 3.19</h2>
+      {/* jarak antar-card (Kembali, profil RS, periode, tabel) sama: 1rem */}
+      <Link
+        to={`/rl319/`}
+        className="gl-back"
+        style={{ "--gl-back-gap": "1rem" }}
+      >
+        <span className="gl-back-icon" aria-hidden="true">
+          <ArrowLeft size={18} />
+        </span>
+        <span className="gl-back-text">
+          <small>Kembali ke</small>
+          <strong>RL 3.19 Cara Bayar</strong>
+        </span>
+      </Link>
       <form onSubmit={Simpan}>
-        <div className="row">
-          <div className="col-md-6">
-            <div className="card">
-              <div className="card-body">
-                <h5 className="card-title h5">Profil Fasyankes</h5>
-                <div
-                  className="form-floating"
-                  style={{ width: "100%", display: "inline-block" }}
-                >
-                  <input
-                    type="text"
-                    className="form-control"
-                    value={namaRS}
-                    disabled={true}
-                  />
-                  <label>Nama</label>
-                </div>
-                <div
-                  className="form-floating"
-                  style={{ width: "100%", display: "inline-block" }}
-                >
-                  <input
-                    type="text"
-                    className="form-control"
-                    value={alamatRS}
-                    disabled={true}
-                  />
-                  <label>Alamat</label>
-                </div>
-                <div
-                  className="form-floating"
-                  style={{ width: "50%", display: "inline-block" }}
-                >
-                  <input
-                    type="text"
-                    className="form-control"
-                    value={namaPropinsi}
-                    disabled={true}
-                  />
-                  <label>Provinsi</label>
-                </div>
-                <div
-                  className="form-floating"
-                  style={{ width: "50%", display: "inline-block" }}
-                >
-                  <input
-                    type="text"
-                    className="form-control"
-                    value={namaKabKota}
-                    disabled={true}
-                  />
-                  <label>Kab/Kota</label>
-                </div>
-              </div>
-            </div>
+        <ProfilRSRingkas kode={kodeRS} rs={profilRS}>
+          <div className={pf.periode}>
+            <span className={pf.periodeLabel}>Periode Laporan</span>
+            <select
+              name="tahun"
+              className={`form-select ${pf.pilih}`}
+              id="tahun"
+              value={tahun}
+              onChange={(e) => setTahun(e.target.value)}
+              aria-label="Tahun"
+            >
+              <option value="">Pilih Tahun</option>
+
+              {years.map((y) => (
+                <option key={y} value={y}>
+                  {y}
+                </option>
+              ))}
+            </select>
           </div>
-          <div className="col-md-6">
-            <div className="card">
-              {/* <div className="card-body">
-                <h5 className="card-title h5">Periode Laporan</h5>
-                <div
-                  className="form-floating"
-                  style={{ width: "100%", display: "inline-block" }}
-                >
-                  <input
-                    name="tahun"
-                    type="number"
-                    className="form-control"
-                    id="tahun"
-                    placeholder="Tahun"
-                    value={tahun}
-                    onChange={(e) => setTahun(e.target.value)}
-                    min="0"
-                    maxLength={4}
-                    onInput={(e) => maxLengthCheck(e)}
-                    onPaste={preventPasteNegative}
-                  />
-                  <label htmlFor="tahun">Tahun</label>
-                </div>
-              </div> */}
+        </ProfilRSRingkas>
 
-              <div className="card-body">
-                <h5 className="card-title h5">Periode Laporan</h5>
-
-                <div className="form-floating" style={{ width: "100%" }}>
-                  <select
-                    name="tahun"
-                    className="form-select"
-                    id="tahun"
-                    value={tahun}
-                    onChange={(e) => setTahun(e.target.value)}
-                  >
-                    <option value="">Pilih Tahun</option>
-
-                    {years.map((y) => (
-                      <option key={y} value={y}>
-                        {y}
-                      </option>
-                    ))}
-                  </select>
-
-                  <label htmlFor="tahun">Tahun</label>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="row mt-3">
+        <div className="row mt-2">
           <div className="col-md-12">
-            <Link to={`/rl319/`} className="gl-back">
-              <span className="gl-back-icon" aria-hidden="true">
-                <ArrowLeft size={18} />
-              </span>
-              <span className="gl-back-text">
-                <small>Kembali ke</small>
-                <strong>RL 3.19 Cara Bayar</strong>
-              </span>
-            </Link>
-
             <div className={`${style["table-container"]} mt-2 mb-1 pb-2 `}>
               {/* Lebar kolom dalam persen dari lebar tabel, selebar tulisan
                   judulnya. Tabel = 124% wadah; left sticky (kelas tambah-1..4

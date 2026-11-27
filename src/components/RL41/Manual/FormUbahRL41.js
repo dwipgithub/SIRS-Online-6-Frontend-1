@@ -7,9 +7,11 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Spinner } from "react-bootstrap";
 import { useCSRFTokenContext } from "../../Context/CSRFTokenContext";
-import { ArrowLeft, Hospital } from "react-bootstrap-icons";
+import { ArrowLeft } from "react-bootstrap-icons";
 import style from "./FormUbahRL41.module.css"; // kelas tabel standar RL 4.1
 import css from "./FormUbahRL41.module.css"; // tata letak sama dengan form tambah
+import ProfilRSRingkas from "../../Shared/ProfilRSRingkas";
+import pf from "../../Shared/ProfilRSRingkas.module.css";
 
 // Golongan umur RL 4.1 dengan nama field dari server (gaya database).
 // Baris terakhir (KELUAR_MATI) adalah Jumlah Pasien Keluar Mati.
@@ -65,8 +67,8 @@ const formatPeriode = (periode) => {
 };
 
 export const FormUbahRL41 = () => {
-  const [namaRS, setNamaRS] = useState("");
-  const [namaKabKota, setNamaKabKota] = useState("");
+  const [kodeRS, setKodeRS] = useState("");
+  const [profilRS, setProfilRS] = useState(null);
   const [token, setToken] = useState("");
   const [expire, setExpire] = useState("");
   const [datainput, setDataInput] = useState(null);
@@ -92,6 +94,7 @@ export const FormUbahRL41 = () => {
       setToken(accessToken);
       const decoded = jwt_decode(accessToken);
       setExpire(decoded.exp);
+      setKodeRS(String(decoded.satKerId));
       getRumahSakit(decoded.satKerId, accessToken);
       getRLEmpatA(accessToken);
     } catch (error) {
@@ -124,8 +127,7 @@ export const FormUbahRL41 = () => {
       const response = await axios.get("/apisirs6v2/rumahsakit/" + rsId, {
         headers: { Authorization: `Bearer ${accessToken}` },
       });
-      setNamaRS(response.data.data.nama);
-      setNamaKabKota(response.data.data.kab_kota_nama);
+      setProfilRS(response.data.data);
     } catch (error) {}
   };
 
@@ -321,24 +323,34 @@ export const FormUbahRL41 = () => {
     <div className="container" style={{ marginTop: "70px", marginBottom: "40px" }}>
       <ToastContainer />
 
-      <div className={css.topRow}>
-        <Link to={`/rl41/`} className="gl-back" style={{ marginBottom: 0 }}>
-          <span className="gl-back-icon" aria-hidden="true">
-            <ArrowLeft size={18} />
-          </span>
-          <span className="gl-back-text">
-            <small>Kembali ke</small>
-            <strong>RL 4.1 Morbiditas Pasien Rawat Inap</strong>
-          </span>
-        </Link>
-        {namaRS && (
-          <span className={css.rsInfo} title="Rumah sakit akun yang sedang login">
-            <Hospital aria-hidden="true" />
-            <strong>{namaRS}</strong>
-            {namaKabKota && <span>· {namaKabKota}</span>}
-          </span>
-        )}
-      </div>
+      {/* jarak antar-card (Kembali, profil RS, periode, tabel) sama: 1rem */}
+      <Link
+        to={`/rl41/`}
+        className="gl-back"
+        style={{ "--gl-back-gap": "1rem" }}
+      >
+        <span className="gl-back-icon" aria-hidden="true">
+          <ArrowLeft size={18} />
+        </span>
+        <span className="gl-back-text">
+          <small>Kembali ke</small>
+          <strong>RL 4.1 Morbiditas Pasien Rawat Inap</strong>
+        </span>
+      </Link>
+
+      {/* Periode tidak bisa diubah di halaman ubah: tampil sebagai teks */}
+      <ProfilRSRingkas kode={kodeRS} rs={profilRS}>
+        <div className={pf.periode}>
+          {datainput && (
+            <>
+              <span className={pf.periodeLabel}>Periode Laporan</span>
+              <span className={pf.periodeTetap}>
+                {formatPeriode(datainput.periode)}
+              </span>
+            </>
+          )}
+        </div>
+      </ProfilRSRingkas>
 
       {spinner && (
         <div className="text-center my-4">
@@ -348,18 +360,10 @@ export const FormUbahRL41 = () => {
 
       {datainput && (
         <>
-          {/* Periode & penyakit (tidak bisa diubah di halaman ubah) */}
-          <div className="card">
+          {/* Penyakit (tidak bisa diubah di halaman ubah) */}
+          <div className="card mt-3">
             <div className="card-body">
               <div className={css.searchBar}>
-                <div>
-                  <span className={css.stepLabel}>Periode laporan</span>
-                  <div className={css.chosen} style={{ flex: "0 0 auto" }}>
-                    <span className={css.chosenCode}>
-                      {formatPeriode(datainput.periode)}
-                    </span>
-                  </div>
-                </div>
                 <div style={{ flex: "1 1 320px" }}>
                   <span className={css.stepLabel}>Penyakit (ICD 10)</span>
                   <div className={css.chosen}>

@@ -10,12 +10,11 @@ import "react-toastify/dist/ReactToastify.css";
 import Spinner from "react-bootstrap/esm/Spinner";
 import { useCSRFTokenContext } from "../../Context/CSRFTokenContext";
 import { ArrowLeft } from "react-bootstrap-icons";
+import ProfilRSRingkas from "../../Shared/ProfilRSRingkas";
 
 export const FormUbahRL318 = () => {
-  const [namaRS, setNamaRS] = useState("");
-  const [alamatRS, setAlamatRS] = useState("");
-  const [namaPropinsi, setNamaPropinsi] = useState("");
-  const [namaKabKota, setNamaKabKota] = useState("");
+  const [kodeRS, setKodeRS] = useState("");
+  const [profilRS, setProfilRS] = useState(null);
   const [rawat_jalan, setRawatJalan] = useState("");
   const [igd, setIgd] = useState("");
   const [rawat_inap, setRawatInap] = useState("");
@@ -47,6 +46,7 @@ export const FormUbahRL318 = () => {
       setToken(response.data.accessToken);
       const decoded = jwt_decode(response.data.accessToken);
       setExpire(decoded.exp);
+      setKodeRS(String(decoded.satKerId));
       getRumahSakit(decoded.satKerId);
     } catch (error) {
       if (error.response) {
@@ -85,10 +85,7 @@ export const FormUbahRL318 = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      setNamaRS(response.data.data.nama);
-      setAlamatRS(response.data.data.alamat);
-      setNamaPropinsi(response.data.data.provinsi_nama);
-      setNamaKabKota(response.data.data.kab_kota_nama);
+      setProfilRS(response.data.data);
     } catch (error) {}
   };
 
@@ -215,80 +212,25 @@ export const FormUbahRL318 = () => {
       className="container"
       style={{ marginTop: "70px", marginBottom: "70px" }}
     >
+      {/* jarak antar-card (Kembali, profil RS, periode, tabel) sama: 1rem */}
+      <Link
+        to={`/rl318/`}
+        className="gl-back"
+        style={{ "--gl-back-gap": "1rem" }}
+      >
+        <span className="gl-back-icon" aria-hidden="true">
+          <ArrowLeft size={18} />
+        </span>
+        <span className="gl-back-text">
+          <small>Kembali ke</small>
+          <strong>RL 3.18 Farmasi Resep</strong>
+        </span>
+      </Link>
       <form onSubmit={Simpan}>
-        <div className="row">
-          <div className="col-md-6">
-            <div className="card">
-              <div className="card-body">
-                <h5 className="card-title h5">Profile Fasyankes</h5>
-                <div
-                  className="form-floating"
-                  style={{ width: "100%", display: "inline-block" }}
-                >
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="floatingInput"
-                    value={namaRS}
-                    disabled={true}
-                  />
-                  <label htmlFor="floatingInput">Nama</label>
-                </div>
-                <div
-                  className="form-floating"
-                  style={{ width: "100%", display: "inline-block" }}
-                >
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="floatingInput"
-                    value={alamatRS}
-                    disabled={true}
-                  />
-                  <label htmlFor="floatingInput">Alamat</label>
-                </div>
-                <div
-                  className="form-floating"
-                  style={{ width: "50%", display: "inline-block" }}
-                >
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="floatingInput"
-                    value={namaPropinsi}
-                    disabled={true}
-                  />
-                  <label htmlFor="floatingInput">Provinsi </label>
-                </div>
-                <div
-                  className="form-floating"
-                  style={{ width: "50%", display: "inline-block" }}
-                >
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="floatingInput"
-                    value={namaKabKota}
-                    disabled={true}
-                  />
-                  <label htmlFor="floatingInput">Kab/Kota</label>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="row mt-3">
-          <div className="col-md-12">
-            <Link to={`/rl318/`} className="gl-back">
-              <span className="gl-back-icon" aria-hidden="true">
-                <ArrowLeft size={18} />
-              </span>
-              <span className="gl-back-text">
-                <small>Kembali ke</small>
-                <strong>RL 3.18 Farmasi Resep</strong>
-              </span>
-            </Link>
+        <ProfilRSRingkas kode={kodeRS} rs={profilRS} />
 
+        <div className="row mt-2">
+          <div className="col-md-12">
             <div className="container" style={{ textAlign: "center" }}>
               {spinner && (
                 <Spinner animation="grow" variant="success"></Spinner>

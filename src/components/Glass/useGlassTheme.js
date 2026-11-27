@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import "./GlassTheme.css";
 
 // ---------- Angka di tabel rata kanan ----------
@@ -63,10 +64,14 @@ const JUMLAH_KOLOM_AWAL = 3;
 const JUMLAH_KOLOM_AWAL_UBAH = 2;
 const HALAMAN_UBAH = /\/(ubah|edit)\/[^/]+\/?$/i;
 
+// Rute aktif diisi oleh <GlassTheme /> dari React Router. Aplikasi memakai
+// MemoryRouter, jadi window.location.pathname selalu alamat dasar.
+let ruteAktif = "";
+
 // Dibaca setiap kali menandai, karena komponen ini bisa tetap terpasang
 // saat berpindah halaman
 const jumlahKolomAwal = () =>
-  HALAMAN_UBAH.test(window.location.pathname)
+  HALAMAN_UBAH.test(ruteAktif)
     ? JUMLAH_KOLOM_AWAL_UBAH
     : JUMLAH_KOLOM_AWAL;
 
@@ -176,6 +181,8 @@ const useGlassTheme = () => {
 // Komponen penanda untuk dipasang di route (App.js):
 // <Route element={<><NavigationBar /><RL31 /><GlassTheme /></>} />
 export const GlassTheme = () => {
+  // diisi saat render, sebelum tabel halaman baru ditandai
+  ruteAktif = useLocation().pathname;
   useGlassTheme();
   return null;
 };

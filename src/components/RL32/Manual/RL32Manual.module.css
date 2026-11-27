@@ -90,136 +90,20 @@
     z-index: 4; /* judul di atas sel isi saat keduanya menempel */
 }
 
-
-/* ===== Animasi tampil halaman RL 3.2 =====
-   Judul, tombol, label filter, lalu tab & tabel muncul berurutan
-   (fade + naik sedikit). fill-mode "backwards" dipakai agar setelah animasi
-   selesai tidak tersisa transform, sehingga elemen position: fixed
-   (ToastContainer) dan header/kolom sticky tetap bekerja normal. */
-@keyframes rl32-fade-up {
-    from {
-        opacity: 0;
-        transform: translateY(-16px);
-    }
-    to {
-        opacity: 1;
-        transform: none;
-    }
+/* Tampilan banyak RS: kolom 2 = Nama RS dengan lebar 10% (bukan Aksi 6%).
+   Jumlah lebar kolom 93% -> skala x1.0753:
+     kolom 2: 2 x 1.0753 x 3%         = 6.45%
+     kolom 3: 2 x 1.0753 x (3% + 10%) = 27.96% */
+.table.denganRS thead th.sticky-header.sticky-2,
+.table.denganRS tbody td.sticky-column.sticky-2 {
+    left: 6.45%;
 }
 
-@keyframes rl32-fade-in {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
+.table.denganRS thead th.sticky-header.sticky-3,
+.table.denganRS tbody td.sticky-column.sticky-3 {
+    left: 27.96%;
 }
 
-.page-enter > :global(.row) > :global(.col-md-12) > * {
-    animation: rl32-fade-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) backwards;
-}
-
-.page-enter > :global(.row) > :global(.col-md-12) > :nth-child(1) { animation-delay: 0.25s; }
-.page-enter > :global(.row) > :global(.col-md-12) > :nth-child(2) { animation-delay: 0.38s; }
-.page-enter > :global(.row) > :global(.col-md-12) > :nth-child(3) { animation-delay: 0.5s; }
-.page-enter > :global(.row) > :global(.col-md-12) > :nth-child(4) { animation-delay: 0.62s; }
-
-/* Baris tabel muncul bergantian saat data tampil (opacity saja agar
-   kolom sticky tidak terganggu) */
-.page-enter .table tbody tr {
-    animation: rl32-fade-in 0.4s ease backwards;
-}
-
-.page-enter .table tbody tr:nth-child(1) { animation-delay: 0.03s; }
-.page-enter .table tbody tr:nth-child(2) { animation-delay: 0.06s; }
-.page-enter .table tbody tr:nth-child(3) { animation-delay: 0.09s; }
-.page-enter .table tbody tr:nth-child(4) { animation-delay: 0.12s; }
-.page-enter .table tbody tr:nth-child(5) { animation-delay: 0.15s; }
-.page-enter .table tbody tr:nth-child(6) { animation-delay: 0.18s; }
-.page-enter .table tbody tr:nth-child(7) { animation-delay: 0.21s; }
-.page-enter .table tbody tr:nth-child(8) { animation-delay: 0.24s; }
-.page-enter .table tbody tr:nth-child(9) { animation-delay: 0.27s; }
-.page-enter .table tbody tr:nth-child(n + 10) { animation-delay: 0.3s; }
-
-/* ----- Card kaca (wadah halaman dari GlassTheme) ikut beranimasi ----- */
-/* Drape: card terbentang dari atas ke bawah seperti kain/tirai yang
-   dijatuhkan, sedikit berayun di ujung lalu diam */
-@keyframes rl32-card-drape {
-    0% {
-        opacity: 0.4;
-        clip-path: inset(0 0 100% 0 round 28px);
-        transform: perspective(1400px) rotateX(-14deg);
-    }
-    55% {
-        opacity: 1;
-        clip-path: inset(0 0 0 0 round 28px);
-        transform: perspective(1400px) rotateX(4deg);
-    }
-    75% {
-        transform: perspective(1400px) rotateX(-1.8deg);
-    }
-    90% {
-        transform: perspective(1400px) rotateX(0.6deg);
-    }
-    100% {
-        opacity: 1;
-        clip-path: inset(0 0 0 0 round 28px);
-        transform: none;
-    }
-}
-
-@keyframes rl32-card-shine {
-    0% {
-        background-position: 160% 0;
-        opacity: 0;
-    }
-    20% {
-        opacity: 1;
-    }
-    100% {
-        background-position: -60% 0;
-        opacity: 0;
-    }
-}
-
-/* Panel kaca (pseudo ::before milik GlassTheme) terbentang dari atas (drape).
-   Animasi di pseudo-element, jadi tidak memengaruhi elemen fixed/sticky. */
-:global(body.glass-theme) :global(#root) > .page-enter::before {
-    transform-origin: top center;
-    animation: rl32-card-drape 1s cubic-bezier(0.22, 1, 0.36, 1) backwards;
-}
-
-/* Kilau cahaya yang menyapu permukaan card setelah muncul */
-:global(body.glass-theme) :global(#root) > .page-enter::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    pointer-events: none;
-    border-radius: 28px;
-    background: linear-gradient(
-        110deg,
-        transparent 35%,
-        rgba(255, 255, 255, 0.45) 50%,
-        transparent 65%
-    );
-    background-size: 250% 100%;
-    background-repeat: no-repeat;
-    opacity: 0;
-    animation: rl32-card-shine 1.2s ease 0.7s both;
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .page-enter > :global(.row) > :global(.col-md-12) > *,
-    .page-enter .table tbody tr {
-        animation: none;
-    }
-    :global(body.glass-theme) :global(#root) > .page-enter::before,
-    :global(body.glass-theme) :global(#root) > .page-enter::after {
-        animation: none;
-    }
-}
 
 /* ===== Garis dalam tabel berwarna coklat =====
    Hanya garis antar sel (1px). GlassTheme.css memaksa garis tabel jadi putih
@@ -233,3 +117,125 @@
     border-bottom: 1px solid rgba(164, 117, 81, 0.4) !important;
 }
 
+
+
+/* ===== Tampilan multi-RS (Tahap 1) ===== */
+
+/* Angka rata kanan, lebar digit seragam */
+.table td.angka {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+/* Kolom Nama RS (peran selain RS) */
+.table td.nama-rs {
+    font-weight: 600;
+    color: #14233a;
+    line-height: 1.3;
+}
+
+.table td.nama-rs small {
+    display: block;
+    font-weight: 500;
+    color: #4b5a6e;
+}
+
+/* Garis pemisah antar-RS */
+.table tr.rs-awal td {
+    border-top: 2px solid rgba(31, 95, 168, 0.35) !important;
+}
+
+.table tr.total-row td {
+    font-weight: 800;
+    background: rgba(164, 117, 81, 0.16) !important;
+    border-top: 2px solid rgba(164, 117, 81, 0.55) !important;
+}
+
+.table td.kosong {
+    padding: 24px;
+    text-align: center;
+    color: #6b7a89;
+}
+
+/* Tabel diredupkan saat halaman berikutnya dimuat */
+.memuat {
+    opacity: 0.55;
+    pointer-events: none;
+    transition: opacity 0.15s ease;
+}
+
+.info {
+    margin: 8px 0 4px;
+    font-size: 0.85rem;
+    color: #4b5a6e;
+}
+
+.pagination {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.pagination-info {
+    font-size: 0.88rem;
+    color: #4b5a6e;
+}
+
+.pagination-tombol {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.pagination-halaman {
+    font-size: 0.88rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+
+/* ===== Ringkasan RS dipilih / sudah / belum mengisi ===== */
+.stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 6px;
+}
+
+.stat {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 6px;
+    padding: 8px 14px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    box-shadow: inset 0 1px 0 #fff;
+}
+
+.stat > svg {
+    align-self: center;
+}
+
+.statValue {
+    font-size: 1.15rem;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+    color: #14233a;
+}
+
+.statLabel {
+    font-size: 0.8rem;
+    color: #4b5a6e;
+}
+
+.statOk > svg {
+    color: #1a8a6e;
+}
+
+.statWarn > svg {
+    color: #b06a1f;
+}

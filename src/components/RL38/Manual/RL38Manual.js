@@ -10,7 +10,6 @@ import { confirmAlert } from "react-confirm-alert";
 import { Modal } from "react-bootstrap";
 import { DownloadTableExcel } from "react-export-table-to-excel";
 import { useCSRFTokenContext } from "../../Context/CSRFTokenContext";
-import drape from "../../Shared/PageDrape.module.css";
 import FilterSummary from "../../Shared/FilterSummary";
 
 const RL38Manual = () => {
@@ -456,10 +455,7 @@ const RL38Manual = () => {
     });
   };
   return (
-    <div
-      className={`container ${drape.drape}`}
-      style={{ marginTop: "70px", marginBottom: "100px" }}
-    >
+    <div>
       <Modal show={show} onHide={handleClose} style={{ position: "fixed" }}>
         <Modal.Header closeButton>
           <Modal.Title>Filter</Modal.Title>
@@ -684,9 +680,6 @@ const RL38Manual = () => {
 
       <div className="row">
         <div className="col-md-12">
-          <h4>
-            <span style={{ color: "gray" }}>RL 3.8 Laboratorium</span>
-          </h4>
           <div style={{ marginBottom: "10px" }}>
             {user.jenisUserId === 4 ? (
               <Link

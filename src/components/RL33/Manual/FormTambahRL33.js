@@ -9,14 +9,16 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useCSRFTokenContext } from "../../Context/CSRFTokenContext";
 import { ArrowLeft } from "react-bootstrap-icons";
+import ProfilRSRingkas from "../../Shared/ProfilRSRingkas";
+import pf from "../../Shared/ProfilRSRingkas.module.css";
 
 const FormTambahRL33 = () => {
-  const [namaRS, setNamaRS] = useState("");
-  const [alamatRS, setAlamatRS] = useState("");
-  const [namaPropinsi, setNamaPropinsi] = useState("");
-  const [namaKabKota, setNamaKabKota] = useState("");
-  const [tahun, setTahun] = useState(String(new Date().getFullYear()));
-  const [bulan, setBulan] = useState(new Date().getMonth() + 1);
+  const [kodeRS, setKodeRS] = useState("");
+  const [profilRS, setProfilRS] = useState(null);
+  // Default periode: bulan lalu (Januari -> Desember tahun sebelumnya)
+  const bulanLalu = new Date(new Date().getFullYear(), new Date().getMonth() - 1, 1);
+  const [tahun, setTahun] = useState(String(bulanLalu.getFullYear()));
+  const [bulan, setBulan] = useState(bulanLalu.getMonth() + 1);
   const [daftarBulan, setDaftarBulan] = useState([]);
   const [dataRL, setDataRL] = useState([]);
   const [token, setToken] = useState("");
@@ -46,6 +48,7 @@ const FormTambahRL33 = () => {
       setToken(response.data.accessToken);
       const decoded = jwt_decode(response.data.accessToken);
       setExpire(decoded.exp);
+      setKodeRS(String(decoded.satKerId));
       getDataRS(decoded.satKerId);
     } catch (error) {
       if (error.response) {
@@ -138,10 +141,7 @@ const FormTambahRL33 = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      setNamaRS(response.data.data.nama);
-      setAlamatRS(response.data.data.alamat);
-      setNamaPropinsi(response.data.data.provinsi_nama);
-      setNamaKabKota(response.data.data.kab_kota_nama);
+      setProfilRS(response.data.data);
     } catch (error) {}
   };
 
@@ -630,129 +630,60 @@ const FormTambahRL33 = () => {
       className="container"
       style={{ marginTop: "70px", marginBottom: "70px" }}
     >
-      <h2>RL. 3.3</h2>
+      {/* jarak antar-card (Kembali, profil RS, periode, tabel) sama: 1rem */}
+      <Link
+        to={`/rl33/`}
+        className="gl-back"
+        style={{ "--gl-back-gap": "1rem" }}
+      >
+        <span className="gl-back-icon" aria-hidden="true">
+          <ArrowLeft size={18} />
+        </span>
+        <span className="gl-back-text">
+          <small>Kembali ke</small>
+          <strong>RL 3.3 Rawat Darurat</strong>
+        </span>
+      </Link>
       <form onSubmit={Simpan}>
-        <div className="row">
-          <div className="col-md-6">
-            <div className="card">
-              <div className="card-body">
-                <h5 className="card-title h5">Profil Fasyankes</h5>
-                <div
-                  className="form-floating"
-                  style={{ width: "100%", display: "inline-block" }}
-                >
-                  <input
-                    type="text"
-                    className="form-control"
-                    value={namaRS}
-                    disabled={true}
-                  />
-                  <label>Nama</label>
-                </div>
-                <div
-                  className="form-floating"
-                  style={{ width: "100%", display: "inline-block" }}
-                >
-                  <input
-                    type="text"
-                    className="form-control"
-                    value={alamatRS}
-                    disabled={true}
-                  />
-                  <label>Alamat</label>
-                </div>
-                <div
-                  className="form-floating"
-                  style={{ width: "50%", display: "inline-block" }}
-                >
-                  <input
-                    type="text"
-                    className="form-control"
-                    value={namaPropinsi}
-                    disabled={true}
-                  />
-                  <label>Provinsi</label>
-                </div>
-                <div
-                  className="form-floating"
-                  style={{ width: "50%", display: "inline-block" }}
-                >
-                  <input
-                    type="text"
-                    className="form-control"
-                    value={namaKabKota}
-                    disabled={true}
-                  />
-                  <label>Kab/Kota</label>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="col-md-6">
-            <div className="card">
-              <div className="card-body">
-                <h5 className="card-title h5">Periode Laporan</h5>
-                <div
-                  className="form-floating"
-                  style={{ width: "50%", display: "inline-block" }}
-                >
-                  <select
-                    value={String(Number(bulan))}
-                    typeof="select"
-                    className="form-control"
-                    onChange={bulanChangeHandler}
+        <ProfilRSRingkas kode={kodeRS} rs={profilRS}>
+          <div className={pf.periode}>
+            <span className={pf.periodeLabel}>Periode Laporan</span>
+            <select
+              value={String(Number(bulan))}
+              className={`form-select ${pf.pilih}`}
+              onChange={bulanChangeHandler}
+              aria-label="Bulan"
+            >
+              {daftarBulan.map((bulan) => {
+                return (
+                  <option
+                    key={bulan.value}
+                    name={bulan.key}
+                    value={bulan.value}
                   >
-                    {daftarBulan.map((bulan) => {
-                      return (
-                        <option
-                          key={bulan.value}
-                          name={bulan.key}
-                          value={bulan.value}
-                        >
-                          {bulan.key}
-                        </option>
-                      );
-                    })}
-                  </select>
-                  <label htmlFor="bulan">Bulan</label>
-                </div>
-                <div
-                  className="form-floating"
-                  style={{ width: "50%", display: "inline-block" }}
-                >
-                <select
-                    name="tahun"
-                    className="form-control"
-                    id="floatingInput"
-                    value={tahun}
-                    onChange={(e) => changeHandlerSingle(e)}
-                  >
-                    {daftarTahun.map((tahun) => (
-                      <option key={tahun} value={tahun}>
-                        {tahun}
-                      </option>
-                    ))}
-                  </select>
-
-                  <label htmlFor="tahun">Tahun</label>
-                </div>
-              </div>
-            </div>
+                    {bulan.key}
+                  </option>
+                );
+              })}
+            </select>
+            <select
+              name="tahun"
+              className={`form-select ${pf.pilih}`}
+              value={tahun}
+              onChange={(e) => changeHandlerSingle(e)}
+              aria-label="Tahun"
+            >
+              {daftarTahun.map((tahun) => (
+                <option key={tahun} value={tahun}>
+                  {tahun}
+                </option>
+              ))}
+            </select>
           </div>
-        </div>
+        </ProfilRSRingkas>
 
-        <div className="row mt-3">
+        <div className="row mt-2">
           <div className="col-md-12">
-            <Link to={`/rl33/`} className="gl-back">
-              <span className="gl-back-icon" aria-hidden="true">
-                <ArrowLeft size={18} />
-              </span>
-              <span className="gl-back-text">
-                <small>Kembali ke</small>
-                <strong>RL 3.3 Rawat Darurat</strong>
-              </span>
-            </Link>
-
             <div className={`${style["table-container"]} mt-2 mb-1 pb-2 `}>
               <table responsive className={style.table}>
                 <thead className={style.thead}>

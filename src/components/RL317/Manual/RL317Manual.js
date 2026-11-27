@@ -12,7 +12,6 @@ import Modal from "react-bootstrap/Modal";
 import Table from "react-bootstrap/Table";
 import { downloadExcel } from "react-export-table-to-excel";
 import { useCSRFTokenContext } from "../../Context/CSRFTokenContext";
-import drape from "../../Shared/PageDrape.module.css";
 import FilterSummary from "../../Shared/FilterSummary";
 
 const RL317Manual = () => {
@@ -486,14 +485,7 @@ const RL317Manual = () => {
   // }
 
   return (
-    <div
-      className={`container ${drape.drape}`}
-      style={{ marginTop: "70px", marginBottom: "70px" }}
-    >
-      <h4 style={{ color: "grey" }}>
-        {" "}
-        <span> RL 3.17 Farmasi Pengadaan Obat </span>
-      </h4>
+    <div>
       <Modal show={show} onHide={handleClose} style={{ position: "fixed" }}>
         <Modal.Header closeButton>
           <Modal.Title>Filter</Modal.Title>

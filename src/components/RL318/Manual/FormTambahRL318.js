@@ -9,11 +9,13 @@ import "react-toastify/dist/ReactToastify.css";
 import Spinner from "react-bootstrap/esm/Spinner";
 import { useCSRFTokenContext } from "../../Context/CSRFTokenContext";
 import { ArrowLeft } from "react-bootstrap-icons";
+import ProfilRSRingkas from "../../Shared/ProfilRSRingkas";
+import pf from "../../Shared/ProfilRSRingkas.module.css";
 
 const FormTambahRL318 = () => {
   const [tahun, setTahun] = useState(String(new Date().getFullYear()));
-  const [namaRS, setNamaRS] = useState("");
-  const [alamatRS, setAlamatRS] = useState("");
+  const [kodeRS, setKodeRS] = useState("");
+  const [profilRS, setProfilRS] = useState(null);
   const [dataRL, setDataRL] = useState([]);
   const [token, setToken] = useState("");
   const [expire, setExpire] = useState("");
@@ -42,6 +44,7 @@ const FormTambahRL318 = () => {
       setToken(response.data.accessToken);
       const decoded = jwt_decode(response.data.accessToken);
       setExpire(decoded.exp);
+      setKodeRS(String(decoded.satKerId));
       getRumahSakit(decoded.satKerId);
     } catch (error) {
       if (error.response) navigate("/");
@@ -70,8 +73,7 @@ const FormTambahRL318 = () => {
       const response = await axiosJWT.get("/apisirs6v2/rumahsakit/" + id, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setNamaRS(response.data.data.nama);
-      setAlamatRS(response.data.data.alamat);
+      setProfilRS(response.data.data);
     } catch (error) {}
   };
 
@@ -162,71 +164,42 @@ const FormTambahRL318 = () => {
       className="container"
       style={{ marginTop: "80px", marginBottom: "50px" }}
     >
+      {/* jarak antar-card (Kembali, profil RS, periode, tabel) sama: 1rem */}
+      <Link
+        to={`/rl318`}
+        className="gl-back"
+        style={{ "--gl-back-gap": "1rem" }}
+      >
+        <span className="gl-back-icon" aria-hidden="true">
+          <ArrowLeft size={18} />
+        </span>
+        <span className="gl-back-text">
+          <small>Kembali ke</small>
+          <strong>RL 3.18 Farmasi Resep</strong>
+        </span>
+      </Link>
       <form onSubmit={Simpan}>
-        <div className="row g-3">
-          <div className="col-md-6">
-            <div className="card shadow-sm border-0">
-              <div className="card-body">
-                <h6 className="fw-bold mb-3 text-secondary">
-                  Profile Fasyankes
-                </h6>
-                <div className="form-floating mb-2">
-                  <input
-                    type="text"
-                    className="form-control"
-                    value={namaRS}
-                    disabled
-                  />
-                  <label>Nama Rumah Sakit</label>
-                </div>
-                <div className="form-floating">
-                  <input
-                    type="text"
-                    className="form-control"
-                    value={alamatRS}
-                    disabled
-                  />
-                  <label>Alamat</label>
-                </div>
-              </div>
-            </div>
+        <ProfilRSRingkas kode={kodeRS} rs={profilRS}>
+          <div className={pf.periode}>
+            <span className={pf.periodeLabel}>Periode Laporan</span>
+            <select
+              className={`form-select ${pf.pilih}`}
+              value={tahun}
+              onChange={(e) => setTahun(e.target.value)}
+              aria-label="Tahun"
+            >
+              <option value="">Pilih Tahun</option>
+              {years.map((y) => (
+                <option key={y} value={y}>
+                  {y}
+                </option>
+              ))}
+            </select>
           </div>
-          <div className="col-md-6">
-            <div className="card shadow-sm border-0">
-              <div className="card-body">
-                <h6 className="fw-bold mb-3 text-secondary">Periode Laporan</h6>
-                <div className="form-floating">
-                  <select
-                    className="form-select"
-                    value={tahun}
-                    onChange={(e) => setTahun(e.target.value)}
-                  >
-                    <option value="">Pilih Tahun</option>
-                    {years.map((y) => (
-                      <option key={y} value={y}>
-                        {y}
-                      </option>
-                    ))}
-                  </select>
-                  <label>Tahun Pelaporan</label>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        </ProfilRSRingkas>
 
-        <div className="row mt-4">
+        <div className="row mt-2">
           <div className="col-md-12">
-            <Link to={`/rl318`} className="gl-back">
-              <span className="gl-back-icon" aria-hidden="true">
-                <ArrowLeft size={18} />
-              </span>
-              <span className="gl-back-text">
-                <small>Kembali ke</small>
-                <strong>RL 3.18 Farmasi Resep</strong>
-              </span>
-            </Link>
-
             {spinner && (
               <div className="text-center my-3">
                 <Spinner animation="border" variant="primary" />

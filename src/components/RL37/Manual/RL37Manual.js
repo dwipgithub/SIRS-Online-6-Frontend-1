@@ -11,7 +11,6 @@ import "react-confirm-alert/src/react-confirm-alert.css";
 import Modal from "react-bootstrap/Modal";
 import { DownloadTableExcel } from "react-export-table-to-excel";
 import { useCSRFTokenContext } from "../../Context/CSRFTokenContext";
-import drape from "../../Shared/PageDrape.module.css";
 import FilterSummary from "../../Shared/FilterSummary";
 
 const RL37Manual = () => {
@@ -744,14 +743,7 @@ const RL37Manual = () => {
   };
 
   return (
-    <div
-      className={`container ${drape.drape}`}
-      style={{ marginTop: "70px", marginBottom: "70px" }}
-    >
-      <h4 style={{ color: "grey" }}>
-        {" "}
-        <span> RL 3.7 Neonatal, Bayi dan Balita </span>
-      </h4>
+    <div>
       <Modal show={show} onHide={handleClose} style={{ position: "fixed" }}>
         <Modal.Header closeButton>
           <Modal.Title>Filter</Modal.Title>

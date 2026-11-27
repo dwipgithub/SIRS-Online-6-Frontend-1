@@ -11,7 +11,6 @@ import "react-confirm-alert/src/react-confirm-alert.css";
 import Modal from "react-bootstrap/Modal";
 import { DownloadTableExcel } from "react-export-table-to-excel";
 import { useCSRFTokenContext } from "../../Context/CSRFTokenContext";
-import drape from "../../Shared/PageDrape.module.css";
 import FilterSummary from "../../Shared/FilterSummary";
 
 const RL35Manual = () => {
@@ -438,10 +437,7 @@ const RL35Manual = () => {
   };
 
   return (
-    <div
-      className={`container ${drape.drape}`}
-      style={{ marginTop: "70px", marginBottom: "70px" }}
-    >
+    <div>
       <Modal show={show} onHide={handleClose} style={{ position: "fixed" }}>
         <Modal.Header closeButton>
           <Modal.Title>Filter</Modal.Title>
@@ -667,9 +663,6 @@ const RL35Manual = () => {
 
       <div className="row">
         <div className="col-md-12">
-          <span style={{ color: "gray" }}>
-            <h4> RL 3.5 Kunjungan</h4>
-          </span>
           <div style={{ marginBottom: "10px" }}>
             {user.jenisUserId === 4 ? (
               <Link

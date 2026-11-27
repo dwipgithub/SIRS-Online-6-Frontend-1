@@ -8,12 +8,13 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useCSRFTokenContext } from "../../Context/CSRFTokenContext";
 import { ArrowLeft } from "react-bootstrap-icons";
+import ProfilRSRingkas from "../../Shared/ProfilRSRingkas";
+import pf from "../../Shared/ProfilRSRingkas.module.css";
 
 export const FormEditRL316 = () => {
-  const [namaRS, setNamaRS] = useState("");
-  const [alamatRS, setAlamatRS] = useState("");
-  const [namaPropinsi, setNamaPropinsi] = useState("");
-  const [namaKabKota, setNamaKabKota] = useState("");
+  const [kodeRS, setKodeRS] = useState("");
+  const [profilRS, setProfilRS] = useState(null);
+  const [periode, setPeriode] = useState("");
   const [namaJenisPelayanan, setNamaJenisPelayanan] = useState("");
 
   const [noMetoda, setNoMetoda] = useState("");
@@ -49,6 +50,7 @@ export const FormEditRL316 = () => {
       setToken(response.data.accessToken);
       const decoded = jwt_decode(response.data.accessToken);
       setExpire(decoded.exp);
+      setKodeRS(String(decoded.satKerId));
       getRumahSakit(decoded.satKerId);
     } catch (error) {
       if (error.response) {
@@ -87,10 +89,7 @@ export const FormEditRL316 = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      setNamaRS(response.data.data.nama);
-      setAlamatRS(response.data.data.alamat);
-      setNamaPropinsi(response.data.data.provinsi_nama);
-      setNamaKabKota(response.data.data.kab_kota_nama);
+      setProfilRS(response.data.data);
     } catch (error) {}
   };
 
@@ -114,6 +113,7 @@ export const FormEditRL316 = () => {
     setKegagalanKB(response.data.data.kegagalan_kb);
     setEfekSamping(response.data.data.efek_samping);
     setDropOut(response.data.data.drop_out);
+    setPeriode(response.data.data.periode);
 
     // setSpinner(false);
     // setNo(response.data.data.jenis_spesialis_id);
@@ -192,79 +192,36 @@ export const FormEditRL316 = () => {
       className="container"
       style={{ marginTop: "70px", marginBottom: "70px" }}
     >
+      {/* jarak antar-card (Kembali, profil RS, periode, tabel) sama: 1rem */}
+      <Link
+        to={`/rl316/`}
+        className="gl-back"
+        style={{ "--gl-back-gap": "1rem" }}
+      >
+        <span className="gl-back-icon" aria-hidden="true">
+          <ArrowLeft size={18} />
+        </span>
+        <span className="gl-back-text">
+          <small>Kembali ke</small>
+          <strong>RL 3.16 Keluarga Berencana</strong>
+        </span>
+      </Link>
       <form onSubmit={UpdateRLTigaTitikDuaBelas}>
-        <div className="row">
-          <div className="col-md-6">
-            <div className="card">
-              <div className="card-body">
-                <h5 className="card-title h5">Profile Fasyankes</h5>
-                <div
-                  className="form-floating"
-                  style={{ width: "100%", display: "inline-block" }}
-                >
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="namaRS"
-                    value={namaRS}
-                    disabled={true}
-                  />
-                  <label htmlFor="namaRS">Nama</label>
-                </div>
-                <div
-                  className="form-floating"
-                  style={{ width: "100%", display: "inline-block" }}
-                >
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="alamatRS"
-                    value={alamatRS}
-                    disabled={true}
-                  />
-                  <label htmlFor="alamatRS">Alamat</label>
-                </div>
-                <div
-                  className="form-floating"
-                  style={{ width: "50%", display: "inline-block" }}
-                >
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="provinsiRS"
-                    value={namaPropinsi}
-                    disabled={true}
-                  />
-                  <label htmlFor="provinsiRS">Provinsi </label>
-                </div>
-                <div
-                  className="form-floating"
-                  style={{ width: "50%", display: "inline-block" }}
-                >
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="kabkotaRS"
-                    value={namaKabKota}
-                    disabled={true}
-                  />
-                  <label htmlFor="kabkotaRS">Kab/Kota</label>
-                </div>
-              </div>
-            </div>
+        <ProfilRSRingkas kode={kodeRS} rs={profilRS}>
+          <div className={pf.periode}>
+            {periode && (
+              <>
+                <span className={pf.periodeLabel}>Periode Laporan</span>
+                <span className={pf.periodeTetap}>
+                  {periode}
+                </span>
+              </>
+            )}
           </div>
-        </div>
-        <div className="row mt-3">
+        </ProfilRSRingkas>
+
+        <div className="row mt-2">
           <div className="col-md-12">
-            <Link to={`/rl316/`} className="gl-back">
-              <span className="gl-back-icon" aria-hidden="true">
-                <ArrowLeft size={18} />
-              </span>
-              <span className="gl-back-text">
-                <small>Kembali ke</small>
-                <strong>RL 3.16 Keluarga Berencana</strong>
-              </span>
-            </Link>
             {/* <div className="container" style={{ textAlign: "center" }}>
               {spinner && (
                 <Spinner animation="grow" variant="success"></Spinner>

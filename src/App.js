@@ -1,4 +1,4 @@
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { MemoryRouter, Navigate, Route, Routes } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { CSRFTokenProvider } from "./components/Context/CSRFTokenContext.js";
 
@@ -7,8 +7,14 @@ import SsoVerif from "./components/Login/SSO_Verif";
 import NavigationBar from "./components/NavigationBar/NavigationBar";
 import Footer from "./components/Footer/Footer";
 import Beranda from "./components/Beranda/beranda";
+import ProfilRS from "./components/Profil/ProfilRS";
 import { GlassTheme } from "./components/Glass/useGlassTheme";
 import ScrollToTop from "./components/ScrollToTop";
+import {
+  hitungRuteAwal,
+  SimpanRute,
+  TombolKembaliBrowser,
+} from "./components/RouterMemori";
 import ToastTheme from "./components/Glass/ToastTheme";
 
 // User
@@ -136,10 +142,16 @@ import Absensi from "./components/Absensi/absensi.js";
 
 // MAINTENANCE
 
+// URL tidak ditampilkan: rute disimpan di memori (lihat RouterMemori.js).
+// Dihitung sekali saat aplikasi dimuat.
+const RUTE_AWAL = hitungRuteAwal();
+
 function App() {
   return (
     <CSRFTokenProvider>
-      <BrowserRouter basename={process.env.PUBLIC_URL}>
+      <MemoryRouter initialEntries={[RUTE_AWAL]}>
+        <SimpanRute />
+        <TombolKembaliBrowser />
         <ScrollToTop />
         <ToastTheme />
         <Routes>
@@ -153,6 +165,16 @@ function App() {
               <>
                 <NavigationBar />
                 <Beranda />
+                <GlassTheme />
+              </>
+            }
+          />
+          <Route
+            path="/profil"
+            element={
+              <>
+                <NavigationBar />
+                <ProfilRS />
                 <GlassTheme />
               </>
             }
@@ -881,7 +903,7 @@ function App() {
           />
           <Route path="*" element={<PageNotFound />} status={404} />
         </Routes>
-      </BrowserRouter>
+      </MemoryRouter>
     </CSRFTokenProvider>
   );
 }

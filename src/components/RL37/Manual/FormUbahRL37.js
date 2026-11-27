@@ -10,12 +10,39 @@ import Table from "react-bootstrap/Table";
 import Spinner from "react-bootstrap/Spinner";
 import { useCSRFTokenContext } from "../../Context/CSRFTokenContext";
 import { ArrowLeft } from "react-bootstrap-icons";
+import ProfilRSRingkas from "../../Shared/ProfilRSRingkas";
+import pf from "../../Shared/ProfilRSRingkas.module.css";
+
+const NAMA_BULAN = [
+  "Januari",
+  "Februari",
+  "Maret",
+  "April",
+  "Mei",
+  "Juni",
+  "Juli",
+  "Agustus",
+  "September",
+  "Oktober",
+  "November",
+  "Desember",
+];
+// "2026-11" -> "November 2026"
+const labelPeriode = (p) => {
+  const teks = String(p || "");
+  // nilai datetime ISO (mis. "2026-10-31T17:00:00.000Z") dibaca dalam zona waktu lokal
+  if (teks.includes("T")) {
+    const d = new Date(teks);
+    return isNaN(d) ? "" : `${NAMA_BULAN[d.getMonth()]} ${d.getFullYear()}`;
+  }
+  const [t, b] = teks.split("-").map(Number);
+  return t && b ? `${NAMA_BULAN[b - 1]} ${t}` : "";
+};
 
 export const FormUbahRL37 = () => {
-  const [namaRS, setNamaRS] = useState("");
-  const [alamatRS, setAlamatRS] = useState("");
-  const [namaPropinsi, setNamaPropinsi] = useState("");
-  const [namaKabKota, setNamaKabKota] = useState("");
+  const [kodeRS, setKodeRS] = useState("");
+  const [profilRS, setProfilRS] = useState(null);
+  const [periode, setPeriode] = useState("");
   // const [jenisKegiatan, setJeniskegiatan] = useState('')
 
   const [no, setNo] = useState("");
@@ -68,6 +95,7 @@ export const FormUbahRL37 = () => {
       setToken(response.data.accessToken);
       const decoded = jwt_decode(response.data.accessToken);
       setExpire(decoded.exp);
+      setKodeRS(String(decoded.satKerId));
       getDataRS(decoded.satKerId);
     } catch (error) {
       if (error.response) {
@@ -297,10 +325,7 @@ export const FormUbahRL37 = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      setNamaRS(response.data.data.nama);
-      setAlamatRS(response.data.data.alamat);
-      setNamaPropinsi(response.data.data.provinsi_nama);
-      setNamaKabKota(response.data.data.kab_kota_nama);
+      setProfilRS(response.data.data);
     } catch (error) {}
   };
   const updateDataRLTigaTitikTujuh = async (e) => {
@@ -364,6 +389,7 @@ export const FormUbahRL37 = () => {
     );
     // console.log(response);
     setNama(response.data.data.jenis_kegiatan_rl_tiga_titik_tujuh.nama);
+    setPeriode(response.data.data.tahun);
     setNo(response.data.data.jenis_kegiatan_rl_tiga_titik_tujuh.no);
     // setJeniskegiatan(response.data.data.rl_tiga_titik_lima_id);
     setRmRumahSakit(response.data.data.rmRumahSakit);
@@ -417,97 +443,37 @@ export const FormUbahRL37 = () => {
       className="container"
       style={{ marginTop: "70px", marginBottom: "70px" }}
     >
+      {/* jarak antar-card (Kembali, profil RS, periode, tabel) sama: 1rem */}
+      <Link
+        to={`/rl37/`}
+        className="gl-back"
+        style={{ "--gl-back-gap": "1rem" }}
+      >
+        <span className="gl-back-icon" aria-hidden="true">
+          <ArrowLeft size={18} />
+        </span>
+        <span className="gl-back-text">
+          <small>Kembali ke</small>
+          <strong>RL 3.7 Neonatal, Bayi, dan Balita</strong>
+        </span>
+      </Link>
       <form onSubmit={updateDataRLTigaTitikTujuh}>
-        <div className="row">
-          <div className="col-md-6">
-            <div className="card">
-              <div className="card-body">
-                <h5 className="card-title h5">Profile Fasyankes</h5>
-                <div
-                  className="form-floating"
-                  style={{ width: "100%", display: "inline-block" }}
-                >
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="floatingInput"
-                    value={namaRS}
-                    disabled={true}
-                  />
-                  <label htmlFor="floatingInput">Nama</label>
-                </div>
-                <div
-                  className="form-floating"
-                  style={{ width: "100%", display: "inline-block" }}
-                >
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="floatingInput"
-                    value={alamatRS}
-                    disabled={true}
-                  />
-                  <label htmlFor="floatingInput">Alamat</label>
-                </div>
-                <div
-                  className="form-floating"
-                  style={{ width: "50%", display: "inline-block" }}
-                >
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="floatingInput"
-                    value={namaPropinsi}
-                    disabled={true}
-                  />
-                  <label htmlFor="floatingInput">Provinsi </label>
-                </div>
-                <div
-                  className="form-floating"
-                  style={{ width: "50%", display: "inline-block" }}
-                >
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="floatingInput"
-                    value={namaKabKota}
-                    disabled={true}
-                  />
-                  <label htmlFor="floatingInput">Kab/Kota</label>
-                </div>
-              </div>
-            </div>
+        <ProfilRSRingkas kode={kodeRS} rs={profilRS}>
+          <div className={pf.periode}>
+            {periode && (
+              <>
+                <span className={pf.periodeLabel}>Periode Laporan</span>
+                <span className={pf.periodeTetap}>
+                  {labelPeriode(periode)}
+                </span>
+              </>
+            )}
           </div>
-          {/* <div className="col-md-6">
-                        <div className="card">
-                            <div className="card-body">
-                                <h5 className="card-title h5">Periode Laporan</h5>
-                                    <div className="form-floating" style={{width:"100%", display:"inline-block"}}>
-                                        <input name="tahun" type="text" className="form-control" id="floatingInput" 
-                                            placeholder="Tahun" value={tahun.substring(0,4)} onChange={e => changeHandlerSingle(e)} disabled={true}/>
-                                        <label htmlFor="floatingInput">Tahun</label>
-                                    </div>
-                                    <div className="form-floating" style={{width:"100%", display:"inline-block"}}>
-                                        <input name="bulan" type="text" className="form-control" id="floatingInput" 
-                                            placeholder="bulan" value={tahun.substring(5,7)} onChange={e => changeHandlerSingle(e)} disabled={true}/>
-                                        <label htmlFor="floatingInput">Bulan</label>
-                                    </div>
-                            </div>
-                        </div>
-                    </div> */}
-        </div>
-        <div className="row mt-3 mb-3">
+        </ProfilRSRingkas>
+
+        <div className="row mt-2 mb-3">
           <div className="col-md-12">
             {/* <h3>Ubah data RL 5.1 -  Pengunjung</h3> */}
-            <Link to={`/rl37/`} className="gl-back">
-              <span className="gl-back-icon" aria-hidden="true">
-                <ArrowLeft size={18} />
-              </span>
-              <span className="gl-back-text">
-                <small>Kembali ke</small>
-                <strong>RL 3.7 Neonatal, Bayi, dan Balita</strong>
-              </span>
-            </Link>
             <div className="container" style={{ textAlign: "center" }}>
               {spinner && (
                 <Spinner animation="grow" variant="success"></Spinner>

@@ -1,0 +1,240 @@
+/* ===== Status pelaporan di Beranda (gaya kaca) ===== */
+.sp {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  margin-top: 0.75rem;
+  width: 100%;
+  animation: sp-muncul 0.6s ease 0.4s backwards;
+}
+
+@keyframes sp-muncul {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+}
+
+.sp-info {
+  margin-top: 0.75rem;
+  color: #4b5a6e;
+}
+
+.sp-ringkas {
+  margin: 0;
+  color: #14233a;
+}
+
+.sp-ringkas a {
+  font-weight: 700;
+  color: #1f5fa8;
+  text-decoration: none;
+}
+
+.sp-bagian {
+  padding: 16px 18px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.32);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6), 0 8px 24px rgba(13, 30, 55, 0.08);
+}
+
+.sp-bagian-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 20px;
+  margin-bottom: 12px;
+}
+
+.sp-judul {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #14233a;
+}
+
+.sp-judul span {
+  font-weight: 600;
+  color: #4b5a6e;
+}
+
+.sp-progres {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.85rem;
+  color: #4b5a6e;
+}
+
+.sp-progres .sp-bar {
+  width: 160px;
+}
+
+.sp-bar {
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(13, 44, 84, 0.1);
+  overflow: hidden;
+}
+
+.sp-bar > div {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #1f5fa8, #1a8a6e);
+  transition: width 0.8s cubic-bezier(0.2, 0.8, 0.3, 1);
+}
+
+/* ----- Kartu RL (tampilan RS) ----- */
+.sp-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 10px;
+}
+
+.sp-kartu {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  text-decoration: none;
+  color: #14233a;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  border-left-width: 4px;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.sp-kartu:hover,
+.sp-kartu:focus-visible {
+  color: #14233a;
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 8px 18px rgba(13, 30, 55, 0.12);
+}
+
+.sp-kartu:focus-visible {
+  outline: 2px solid #1f5fa8;
+  outline-offset: 2px;
+}
+
+.sp-sudah {
+  border-left-color: #1a8a6e;
+}
+
+.sp-belum {
+  border-left-color: #d08a2e;
+}
+
+.sp-kartu-atas {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sp-kode {
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.sp-sudah .sp-ikon {
+  color: #1a8a6e;
+}
+
+.sp-belum .sp-ikon {
+  color: #d08a2e;
+}
+
+.sp-nama {
+  font-size: 0.8rem;
+  color: #4b5a6e;
+  line-height: 1.3;
+  min-height: 2.1em;
+}
+
+.sp-kartu-bawah {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.sp-sudah .sp-kartu-bawah {
+  color: #11543f;
+}
+
+.sp-belum .sp-kartu-bawah {
+  color: #8a5212;
+}
+
+.sp-aksi {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  color: #1f5fa8;
+}
+
+.sp-otomatis {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-weight: 600;
+  color: #6b7a89;
+}
+
+/* ----- Baris ringkasan (tampilan wilayah) ----- */
+.sp-daftar {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sp-baris {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(80px, 2fr) auto;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.86rem;
+  color: #14233a;
+}
+
+.sp-baris-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sp-baris-angka {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.sp-baris-angka span {
+  color: #6b7a89;
+}
+
+@media (max-width: 575.98px) {
+  .sp-baris {
+    grid-template-columns: 1fr auto;
+  }
+  .sp-baris .sp-bar {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+  .sp-progres .sp-bar {
+    width: 100px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sp,
+  .sp-bar > div,
+  .sp-kartu {
+    animation: none;
+    transition: none;
+  }
+}

@@ -1,11 +1,5 @@
 // Kerangka RL32: tab SIRS (Manual/) & tab SATUSEHAT (SATUSEHAT/).
-// Struktur sama dengan RL34/RL51. Selama SATUSEHAT belum ada, halaman Manual
-// ditampilkan langsung (tanpa tombol tab).
-//
-// Cara mengaktifkan SATUSEHAT:
-//   1. Buat SATUSEHAT/TabSatuSehatRL32.js (+ .module.css), contoh: RL34/SATUSEHAT
-//   2. Ganti baris "const TabSatuSehat = null;" di bawah dengan:
-//        import TabSatuSehat from "./SATUSEHAT/TabSatuSehatRL32";
+// Struktur sama dengan RL34/RL51.
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
@@ -13,15 +7,15 @@ import { useNavigate } from "react-router-dom";
 import { useCSRFTokenContext } from "../Context/CSRFTokenContext";
 import { getStatusSatset } from "../../api/status_satset.js";
 import drape from "../Shared/PageDrape.module.css";
+import style from "../Shared/TabRL.module.css";
 import RL32Manual from "./Manual/RL32Manual";
+import TabSatuSehat from "./SATUSEHAT/TabSatuSehatRL32";
 
-const TabSatuSehat = null;
-
-const JUDUL = "RL 3.2 Rawat Inap";
+const JUDUL = "RL. 3.2 Rawat Inap";
 
 // Tab SIRS | SATUSEHAT. Tab SATUSEHAT hanya muncul untuk user rumah sakit
 // (jenisUserId 4) yang status SATUSEHAT-nya aktif.
-const TabMenu = () => {
+const RL32 = () => {
   const [activeTab, setActiveTab] = useState("tab1");
   const { CSRFToken } = useCSRFTokenContext();
   const [user, setUser] = useState({});
@@ -80,16 +74,18 @@ const TabMenu = () => {
 
       <div className="tab-content mt-3">
         <div className={`tab-pane fade ${activeTab === "tab1" ? "show active" : ""}`}>
-          <RL32Manual />
+          <div className={style.card}>
+            <RL32Manual />
+          </div>
         </div>
         <div className={`tab-pane fade ${activeTab === "tab2" ? "show active" : ""}`}>
-          {activeTab === "tab2" && <TabSatuSehat />}
+          <div className={style.card}>
+            {activeTab === "tab2" && <TabSatuSehat />}
+          </div>
         </div>
       </div>
     </div>
   );
 };
-
-const RL32 = () => (TabSatuSehat ? <TabMenu /> : <RL32Manual />);
 
 export default RL32;

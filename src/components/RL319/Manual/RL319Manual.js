@@ -12,7 +12,6 @@ import Modal from "react-bootstrap/Modal";
 // import Table from "react-bootstrap/Table";
 import { downloadExcel } from "react-export-table-to-excel";
 import { useCSRFTokenContext } from "../../Context/CSRFTokenContext";
-import drape from "../../Shared/PageDrape.module.css";
 import FilterSummary from "../../Shared/FilterSummary";
 
 const RL319Manual = () => {
@@ -475,7 +474,7 @@ const RL319Manual = () => {
   }
 
   return (
-    <div className={`container ${drape.drape}`} style={{ marginTop: "70px" }}>
+    <div>
       <ToastContainer />
       <Modal show={show} onHide={handleClose} style={{ position: "fixed" }}>
         <Modal.Header closeButton>
@@ -679,9 +678,6 @@ const RL319Manual = () => {
 
       <div className="row">
         <div className="col-sm-12">
-          <h4>
-            <span style={{ color: "gray" }}>RL 3.19 Cara Bayar</span>
-          </h4>
           <div style={{ marginBottom: "10px" }}>
             {user.jenisUserId === 4 ? (
               <Link

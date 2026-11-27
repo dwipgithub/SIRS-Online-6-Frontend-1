@@ -20,6 +20,9 @@ const Absensi = () => {
   const [provinsiId, setProvinsiId] = useState(null);
   const [kabKotaId, setKabKotaId] = useState(null);
   const [dataAbsensi, setDataAbsensi] = useState([]);
+  // true selama permintaan data absensi berjalan (setelah klik Cari)
+  const [memuat, setMemuat] = useState(false);
+  const [pesanGagal, setPesanGagal] = useState("");
   const [namafile, setNamaFile] = useState("");
   const tableRef = useRef(null);
   const [apa, setApa] = useState(true);
@@ -159,6 +162,8 @@ const Absensi = () => {
       parameterAbsensi.tahun = tahun;
     }
 
+    setMemuat(true);
+    setPesanGagal("");
     try {
       const customConfig = {
         headers: {
@@ -186,6 +191,13 @@ const Absensi = () => {
       setApa(false);
     } catch (error) {
       console.log(error);
+      // hasil pencarian sebelumnya dikosongkan agar tidak dikira hasil
+      // filter yang baru (dan tidak ikut ter-download)
+      setDataAbsensi([]);
+      setApa(true);
+      setPesanGagal("Data absensi gagal dimuat. Silakan coba lagi.");
+    } finally {
+      setMemuat(false);
     }
   };
 
@@ -301,8 +313,22 @@ const Absensi = () => {
                 </div>
 
                 <div className="mt-3">
-                  <button type="submit" className="btn btn-outline-success">
-                    <HiSaveAs /> Cari
+                  <button
+                    type="submit"
+                    className="btn btn-outline-success"
+                    disabled={memuat}
+                    aria-busy={memuat}
+                  >
+                    {memuat ? (
+                      <>
+                        <span className={style["putar-kecil"]} aria-hidden="true" />{" "}
+                        Mencari…
+                      </>
+                    ) : (
+                      <>
+                        <HiSaveAs /> Cari
+                      </>
+                    )}
                   </button>
                   <DownloadTableExcel
                     filename={namafile}
@@ -332,6 +358,24 @@ const Absensi = () => {
       </form>
       <div className="row mt-3">
         <div className="col-md-12">
+          {pesanGagal && (
+            <div className={style["pesan-gagal"]} role="alert">
+              {pesanGagal}
+            </div>
+          )}
+          <div
+            className={`${style["area-tabel"]} ${memuat ? style["sedang-memuat"] : ""}`}
+            aria-busy={memuat}
+          >
+          {memuat && (
+            <div className={style["lapisan-memuat"]} role="status">
+              <span className={style.putar} aria-hidden="true" />
+              <span className={style["teks-memuat"]}>Memuat data absensi…</span>
+              <span className={style["teks-memuat-kecil"]}>
+                Mohon tunggu, data seluruh rumah sakit sedang diambil.
+              </span>
+            </div>
+          )}
           <div className={style["table-container"]}>
             {/* data-kolom-cokelat="5": kolom identitas No. s.d. Pengisian %
                 (yang diam saat tabel digeser) berwarna cokelat */}
@@ -5395,6 +5439,7 @@ const Absensi = () => {
                 })}
               </tbody>
             </table>
+          </div>
           </div>
         </div>
       </div>

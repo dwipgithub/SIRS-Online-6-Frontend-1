@@ -380,6 +380,31 @@ body.gs-has-sidebar footer {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
 }
 
+/* Akun RS: kartu nama RS bisa diklik -> halaman Profil RS */
+.gs-user-link {
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.gs-user-link:hover,
+.gs-user-link:focus-visible {
+  color: inherit;
+  background: rgba(255, 255, 255, 0.22);
+  border-color: rgba(255, 255, 255, 0.32);
+}
+
+.gs-user-link:focus-visible {
+  outline: 2px solid #d9a066;
+  outline-offset: 2px;
+}
+
+.gs-user-link.active {
+  background: rgba(255, 255, 255, 0.28);
+  border-color: rgba(255, 255, 255, 0.45);
+}
+
 .gs-user-text {
   display: flex;
   flex-direction: column;

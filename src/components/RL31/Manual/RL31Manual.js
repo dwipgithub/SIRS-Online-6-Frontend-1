@@ -10,7 +10,6 @@ import Modal from "react-bootstrap/Modal";
 import Table from "react-bootstrap/Table";
 import { downloadExcel } from "react-export-table-to-excel";
 import { useCSRFTokenContext } from "../../Context/CSRFTokenContext";
-import drape from "../../Shared/PageDrape.module.css";
 import FilterSummary from "../../Shared/FilterSummary";
 
 const RL31Manual = () => {
@@ -290,10 +289,7 @@ const RL31Manual = () => {
   };
 
   return (
-    <div className={`container ${drape.drape}`} style={{ marginTop: "70px" }}>
-      <h4>
-        <span style={{ color: "gray" }}>RL 3.1 Indikator Pelayanan</span>
-      </h4>
+    <div>
 
       <Modal
         show={show}
